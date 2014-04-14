@@ -1,5 +1,7 @@
 package at.tuwien.foop.labyrinth.network;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,11 +16,11 @@ public class LabyrinthServerImpl implements LabyrinthServer {
 	}
 	
 	@Override
-	public void addNetworkEventHandler(NetworkEventHandler handler) {
+	public void addNetworkEventHandler(NetworkEventHandler handler) throws RemoteException{
 		handlers.add(handler);
 	}
 	
-	public void distributeEvent(Event event) {
+	public void distributeEvent(Event event) throws RemoteException {
 		for(NetworkEventHandler handler : handlers) {
 			handler.fireEvent(event);
 		}

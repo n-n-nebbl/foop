@@ -10,7 +10,7 @@ public class RmiService {
 
 	private static final String bindingName = "labyrinthServer";
 
-	public static LabyrinthServer registerToServer(String host) throws RemoteException {
+	public static LabyrinthServer getLabyrinthServer(String host) throws RemoteException {
 		Registry registry = LocateRegistry.getRegistry(host);
 		try {
 			LabyrinthServer server = (LabyrinthServer) registry

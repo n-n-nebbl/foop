@@ -8,6 +8,7 @@ public class ContextHolder {
 	
 	static {
 		ctx = new ClassPathXmlApplicationContext("application-context.xml");
+		ctx.registerShutdownHook();
 	}
 	
 	public static ClassPathXmlApplicationContext getContext() {

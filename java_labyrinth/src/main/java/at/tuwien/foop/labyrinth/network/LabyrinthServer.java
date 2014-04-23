@@ -10,10 +10,17 @@ public interface LabyrinthServer extends Remote {
 
 	/**
 	 * Adds an remote Object to the labyrinth server
-	 * @param handler Has to be an already exported Remote-Stub!!! (UnicastcastRemoteObject.export(obj, 0))
+	 * @param handler Has to be an already exported Remote-Stub!!! (handler.export())
 	 * @throws RemoteException
 	 */
 	public void addNetworkEventHandler(NetworkEventHandler handler) throws RemoteException;
+	
+	/**
+	 * 
+	 * @param handler 
+	 * @throws RemoteException
+	 */
+	public void removeNetworkEventHandler(NetworkEventHandler handler) throws RemoteException;
 	
 	/**
 	 * Fires given Event on all registered NetworkEventHandlers

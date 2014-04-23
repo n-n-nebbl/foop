@@ -11,18 +11,24 @@
 
 	<context:annotation-config />
 	<context:component-scan base-package="at.tuwien.foop.labyrinth" />
-	
-	<util:list id="doorList" value-type="at.tuwien.foop.labyrinth.model.Door" list-class="java.util.ArrayList" />
-	<util:list id="mouseList" value-type="at.tuwien.foop.labyrinth.model.Mouse" list-class="java.util.ArrayList" />
-	
-	<util:list id="eventHandlerList" value-type="at.tuwien.foop.labyrinth.event.EventHandler" list-class="java.util.ArrayList">
+
+	<util:list id="doorList" value-type="at.tuwien.foop.labyrinth.model.Door"
+		list-class="java.util.ArrayList" />
+	<util:list id="mouseList" value-type="at.tuwien.foop.labyrinth.model.Mouse"
+		list-class="java.util.ArrayList" />
+
+	<util:list id="eventHandlerList" value-type="at.tuwien.foop.labyrinth.event.EventHandler"
+		list-class="java.util.ArrayList">
 		<ref bean="doorClickedEventHandler" />
 		<ref bean="mouseMoveEventHandler" />
 	</util:list>
-	
+
 	<bean id="eventBus" class="at.tuwien.foop.labyrinth.event.EventBus">
 		<constructor-arg>
-			<ref bean="eventHandlerList"/>
+			<ref bean="eventHandlerList" />
 		</constructor-arg>
 	</bean>
+
+	<bean id="networkEventHandlerStub" class="at.tuwien.foop.labyrinth.network.NetworkEventHandler"
+		factory-bean="networkEventHandlerImpl" factory-method="export" />
 </beans>

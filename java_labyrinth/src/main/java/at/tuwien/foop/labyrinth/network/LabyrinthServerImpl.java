@@ -11,19 +11,26 @@ public class LabyrinthServerImpl implements LabyrinthServer {
 
 	private List<NetworkEventHandler> handlers;
 	private Labyrinth labyrinth;
-	
+
 	public LabyrinthServerImpl() {
 		handlers = new ArrayList<>();
 	}
-	
+
 	@Override
-	public void addNetworkEventHandler(NetworkEventHandler handler) throws RemoteException{
+	public void addNetworkEventHandler(NetworkEventHandler handler)
+			throws RemoteException {
 		handlers.add(handler);
 	}
-	
+
+	@Override
+	public void removeNetworkEventHandler(NetworkEventHandler handler)
+			throws RemoteException {
+		System.out.println(handlers.remove(handler));
+	}
+
 	@Override
 	public void distributeEvent(Event event) throws RemoteException {
-		for(NetworkEventHandler handler : handlers) {
+		for (NetworkEventHandler handler : handlers) {
 			handler.fireEvent(event);
 		}
 	}

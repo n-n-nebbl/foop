@@ -6,45 +6,64 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
+import javax.annotation.PreDestroy;
+
 import org.springframework.stereotype.Component;
 
 @Component
 public class RmiService {
 
 	private final String bindingName = "labyrinthServer";
+	private LabyrinthServer boundServer;
+	private Registry registry;
 
-	public LabyrinthServer getLabyrinthServer(String host) throws RemoteException {
-		Registry registry = LocateRegistry.getRegistry(host);
+	public LabyrinthServer getLabyrinthServer(String host)
+			throws RemoteException {
+		Registry remoteRegistry = LocateRegistry.getRegistry(host);
 		try {
-			LabyrinthServer server = (LabyrinthServer) registry
+			LabyrinthServer server = (LabyrinthServer) remoteRegistry
 					.lookup(bindingName);
 			return server;
 		} catch (NotBoundException ex) {
-			System.out.println("Error occured during bind: "
-					+ ex.getMessage());
+			System.out.println("Error occured during bind: " + ex.getMessage());
 			return null;
 		}
 	}
 
 	public boolean startRegistry() throws RemoteException {
-		Registry registry = LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
+		registry = LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
 		return (registry != null);
 	}
-	
-	public void bindLabyrinthServer(LabyrinthServer server) throws RemoteException {
-		Registry registry = LocateRegistry.getRegistry();
+
+	public void bindLabyrinthServer(LabyrinthServer server)
+			throws RemoteException {
 		LabyrinthServer stub = (LabyrinthServer) UnicastRemoteObject
 				.exportObject(server, 0);
-		registry.rebind(bindingName, stub);	
+		registry.rebind(bindingName, stub);
+		boundServer = server;
 	}
 
+	@PreDestroy
 	public void stopRegistry() throws RemoteException {
-		Registry registry = LocateRegistry.getRegistry();
+		if (registry == null) {
+			return;
+		}
 		try {
 			registry.unbind(bindingName);
-		} catch (NotBoundException ex) {
-			System.out.println("Error occured during unbind: "
+			if (boundServer != null) {
+				UnicastRemoteObject.unexportObject(boundServer, true);
+			}
+		} catch (NotBoundException nbe) {
+		} catch (Exception e) {
+			System.out.println("Error occured during unbinding of server: "
+					+ e.getMessage());
+		}
+		try {
+			UnicastRemoteObject.unexportObject(registry, true);
+		} catch (Exception ex) {
+			System.out.println("Error occured during unbinding of registry: "
 					+ ex.getMessage());
 		}
+
 	}
 }

@@ -4,6 +4,8 @@ import at.tuwien.foop.labyrinth.model.Mouse;
 
 public class MouseMoveEvent implements Event{
 
+	private int mouseID;
+	
 	private int old_x;
 	private int old_y;
 	private int old_direction;
@@ -16,6 +18,14 @@ public class MouseMoveEvent implements Event{
 		this.old_x = 0;
 		this.old_y = 0;
 		this.old_direction = Mouse.DIRECTION_RIGHT;
+	}
+
+	public int getMouseID() {
+		return mouseID;
+	}
+
+	public void setMouseID(int mouseID) {
+		this.mouseID = mouseID;
 	}
 
 	public int getOld_x() {

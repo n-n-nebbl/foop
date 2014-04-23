@@ -35,7 +35,7 @@ public class EventFactory {
 			newX--;
 			break;
 		case Mouse.DIRECTION_DOWN:
-			newY--;
+			newY++;
 			break;
 		}
 		

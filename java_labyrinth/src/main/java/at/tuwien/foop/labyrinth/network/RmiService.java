@@ -6,11 +6,14 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class RmiService {
 
-	private static final String bindingName = "labyrinthServer";
+	private final String bindingName = "labyrinthServer";
 
-	public static LabyrinthServer getLabyrinthServer(String host) throws RemoteException {
+	public LabyrinthServer getLabyrinthServer(String host) throws RemoteException {
 		Registry registry = LocateRegistry.getRegistry(host);
 		try {
 			LabyrinthServer server = (LabyrinthServer) registry
@@ -23,19 +26,19 @@ public class RmiService {
 		}
 	}
 
-	public static boolean startRegistry() throws RemoteException {
+	public boolean startRegistry() throws RemoteException {
 		Registry registry = LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
 		return (registry != null);
 	}
 	
-	public static void bindLabyrinthServer(LabyrinthServer server) throws RemoteException {
+	public void bindLabyrinthServer(LabyrinthServer server) throws RemoteException {
 		Registry registry = LocateRegistry.getRegistry();
 		LabyrinthServer stub = (LabyrinthServer) UnicastRemoteObject
 				.exportObject(server, 0);
 		registry.rebind(bindingName, stub);	
 	}
 
-	public static void stopRegistry() throws RemoteException {
+	public void stopRegistry() throws RemoteException {
 		Registry registry = LocateRegistry.getRegistry();
 		try {
 			registry.unbind(bindingName);

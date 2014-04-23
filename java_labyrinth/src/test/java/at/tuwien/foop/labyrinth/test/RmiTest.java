@@ -7,6 +7,7 @@ import java.rmi.RemoteException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import at.tuwien.foop.labyrinth.event.EventBus;
 import at.tuwien.foop.labyrinth.event.MouseMoveEvent;
@@ -16,25 +17,31 @@ import at.tuwien.foop.labyrinth.network.LabyrinthServerImpl;
 import at.tuwien.foop.labyrinth.network.NetworkEventHandlerImpl;
 import at.tuwien.foop.labyrinth.network.RmiService;
 
-public class RmiTests {
+public class RmiTest {
 
+	ClassPathXmlApplicationContext ctx;
+	
 	LabyrinthServerImpl server;
 	LabyrinthServer remote;
 	EventBus localEventBus;
+	RmiService rmiService;
 
 	@Before
 	public void setUpTest() throws RemoteException {
-		RmiService.startRegistry();
+		ctx = new ClassPathXmlApplicationContext("application-context.xml");
+		rmiService = ctx.getBean(RmiService.class);
+		rmiService.startRegistry();
 		server = new LabyrinthServerImpl();
-		RmiService.bindLabyrinthServer(server);
-		remote = RmiService.getLabyrinthServer("localhost");
+		rmiService.bindLabyrinthServer(server);
+		remote = rmiService.getLabyrinthServer("localhost");
 
 		localEventBus = new EventBus();
 	}
 
 	@After
 	public void tearDownTest() throws RemoteException {
-		RmiService.stopRegistry();
+		rmiService.stopRegistry();
+		ctx.close();
 	}
 
 	@Test
@@ -42,10 +49,12 @@ public class RmiTests {
 		// Client side
 		MouseMoveEvent event = new MouseMoveEvent();
 		MouseMoveEventHandler mouseHandler = mock(MouseMoveEventHandler.class);
+		when(mouseHandler.getEventClass()).thenReturn(MouseMoveEvent.class);
+		
 		NetworkEventHandlerImpl handler = new NetworkEventHandlerImpl(
 				localEventBus);
 
-		localEventBus.addEventHandler(mouseHandler, MouseMoveEvent.class);
+		localEventBus.addEventHandler(mouseHandler);
 		// send remote object reference to server-side
 		remote.addNetworkEventHandler(handler.export());
 

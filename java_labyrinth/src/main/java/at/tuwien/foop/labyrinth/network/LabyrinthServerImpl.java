@@ -30,6 +30,9 @@ public class LabyrinthServerImpl implements LabyrinthServer {
 
 	@Override
 	public void distributeEvent(Event event) throws RemoteException {
+		/**
+		 * TODO: Logic for gameplay
+		 */
 		for (NetworkEventHandler handler : handlers) {
 			handler.fireEvent(event);
 		}

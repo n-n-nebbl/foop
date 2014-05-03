@@ -3,6 +3,7 @@ package at.tuwien.foop.labyrinth.gui;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.swing.JFrame;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,17 @@ import at.tuwien.foop.labyrinth.model.Mouse;
 
 @Component
 public class GUI {
+	
+	public GUI(){
+		JFrame f = new JFrame();
+		f.setTitle("Mouse Labyrinth");
+		f.add(new LabyrinthView());
+		f.setSize(620, 640);
+		f.setLocationRelativeTo(null);
+		f.setVisible(true);
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	
 
 	/*
 	 * Just example Code

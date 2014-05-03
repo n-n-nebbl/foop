@@ -14,13 +14,13 @@ public class EventFactory {
 	 * @param moveDirection Direction of the movement (eg: Mouse.DIRECTION_UP)
 	 * @return
 	 */
-	public MouseMoveEvent createMouseMoveEvent(Mouse mouse, int moveDirection) {
+	public MouseMoveEvent createMouseMoveEvent(Mouse mouse, int moveDirection, int newX, int newY) {
 		MouseMoveEvent event = new MouseMoveEvent();
 		event.setOld_direction(mouse.getMouseDirection());
 		event.setOld_x(mouse.getX());
 		event.setOld_y(mouse.getY());
 		
-		int newX, newY;
+		//int newX, newY;
 		newX = mouse.getX();
 		newY = mouse.getY();
 		

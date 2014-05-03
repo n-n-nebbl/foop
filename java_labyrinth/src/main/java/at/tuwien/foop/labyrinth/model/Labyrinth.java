@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.Scanner;
 
+//the labyrinth class laods a .txt file including the map
+
 public class Labyrinth implements Serializable {
 
 	private String path, field[];

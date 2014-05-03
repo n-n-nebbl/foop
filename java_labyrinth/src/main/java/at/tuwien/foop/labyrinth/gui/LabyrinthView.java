@@ -3,10 +3,19 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import java.util.*;
+import java.util.List;
 
+import javax.annotation.Resource;
 import javax.swing.Timer;
 import javax.swing.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import at.tuwien.foop.labyrinth.event.EventFactory;
+import at.tuwien.foop.labyrinth.event.EventHandler;
+import at.tuwien.foop.labyrinth.event.MouseMoveEvent;
+import at.tuwien.foop.labyrinth.event.MouseMoveEventHandler;
+import at.tuwien.foop.labyrinth.model.Door;
 import at.tuwien.foop.labyrinth.model.Labyrinth;
 import at.tuwien.foop.labyrinth.model.Mouse;
 
@@ -16,17 +25,25 @@ public class LabyrinthView extends JPanel implements ActionListener, ImageObserv
 	private Labyrinth f; 
 	private Mouse mouse_blue, mouse_green;
 	
-	private boolean doorClosed = true;
-
+	@Autowired
+	private EventFactory eventFactory;
+	private MouseMoveEvent mouseEvent;
+	private EventHandler<MouseMoveEvent> eventHandler;
+	
 	private Timer timer;
 	//private Timer timer2 = new Timer(500, new TimerListener());
 
 	public LabyrinthView() {
 		
 		f = new Labyrinth(31, "./maps/map.txt");
+		
 		mouse_blue = new Mouse(1, 1, "./images/player_blue.png");
 		mouse_green = new Mouse(29, 1, "./images/player_green.png");
 
+		eventFactory = new EventFactory();
+		mouseEvent = new MouseMoveEvent();
+		eventHandler = new MouseMoveEventHandler();
+		
 		addKeyListener(new Al());
 
 		setFocusable(true);
@@ -36,9 +53,12 @@ public class LabyrinthView extends JPanel implements ActionListener, ImageObserv
 		timer.setRepeats(true);
 		timer.start();
 		
-		//		timer2.start();
+		//timer2.start();
 	}
 
+	/**
+	 * creates the graphical components for the map.
+	 */
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 
@@ -78,32 +98,54 @@ public class LabyrinthView extends JPanel implements ActionListener, ImageObserv
 		repaint();
 	}
 	
+	/**
+	 * TestKeyAdapter for checking if mouse moves like expected
+	 * TODO the mouse moves should work via the Events  
+	 * curaintly the view changes the model directly...
+	 */
 
 	public class Al extends KeyAdapter{
 
 		public void keyPressed(KeyEvent e){
 			int keycode = e.getKeyCode();
 
-//			if(keycode == KeyEvent.VK_W){
-//				if(f.getLabyrinth(mouse_blue.getX(), mouse_blue.getY()-1).equals("P"))
-//					mouse_blue.moves(0, -1);
-//			}
-//			if(keycode == KeyEvent.VK_A){
-//				if(f.getLabyrinth(mouse_blue.getX()-1, mouse_blue.getY()).equals("P"))
-//					mouse_blue.moves(-1, 0);
-//			}
-//			if(keycode == KeyEvent.VK_S){
-//				if(f.getLabyrinth(mouse_blue.getX(), mouse_blue.getY()+1).equals("P"))
-//					mouse_blue.moves(0, 1);
-//			}
-//			if(keycode == KeyEvent.VK_D){
-//				if(f.getLabyrinth(mouse_blue.getX()+1, mouse_blue.getY()).equals("P"))
-//					mouse_blue.moves(1, 0);
-//			}
-//			System.out.println("Mouse Position: " + mouse_blue.getX() + " " + mouse_blue.getY());
-//
-//			if(mouse_blue.getX()==11 && mouse_blue.getY()==27)
-//				System.out.println("FOUND CHEESEEEEEE!");
+			if(keycode == KeyEvent.VK_W){
+				if(f.getLabyrinth(mouse_blue.getX(), mouse_blue.getY()-1).equals("P"))
+					
+					mouse_blue.setX(mouse_blue.getX());
+				    mouse_blue.setY(mouse_blue.getY()-1);
+
+				//	eventFactory.createMouseMoveEvent(mouse_blue, 0, mouse_blue.getX(), mouse_blue.getY()-1);
+			}
+			if(keycode == KeyEvent.VK_A){
+				if(f.getLabyrinth(mouse_blue.getX()-1, mouse_blue.getY()).equals("P"))
+					
+					mouse_blue.setX(mouse_blue.getX()-1);
+				    mouse_blue.setY(mouse_blue.getY());
+
+				//	eventFactory.createMouseMoveEvent(mouse_blue, 3, mouse_blue.getX()-1, mouse_blue.getY());
+			}
+			if(keycode == KeyEvent.VK_S){
+				if(f.getLabyrinth(mouse_blue.getX(), mouse_blue.getY()+1).equals("P"))
+					
+					mouse_blue.setX(mouse_blue.getX());
+				    mouse_blue.setY(mouse_blue.getY()+1);
+
+				//	eventFactory.createMouseMoveEvent(mouse_blue, 2, mouse_blue.getX(), mouse_blue.getY()+1);
+			}
+			if(keycode == KeyEvent.VK_D){
+				if(f.getLabyrinth(mouse_blue.getX()+1, mouse_blue.getY()).equals("P"))
+					
+					mouse_blue.setX(mouse_blue.getX()+1);
+					mouse_blue.setY(mouse_blue.getY());
+					
+				//	eventFactory.createMouseMoveEvent(mouse_blue, 1, mouse_blue.getX()+1, mouse_blue.getY());
+					
+			}
+			System.out.println("Mouse Position: " + mouse_blue.getX() + " " + mouse_blue.getY());
+
+			if(mouse_blue.getX()==11 && mouse_blue.getY()==27)
+				System.out.println("FOUND CHEESEEEEEE!");
 
 		}
 
@@ -113,12 +155,10 @@ public class LabyrinthView extends JPanel implements ActionListener, ImageObserv
 	public void actionPerformed(ActionEvent e) {
 		repaint();
 	}
-
-//	public void findCheese(){
-//		while(mouse_blue.getX()!=11 && mouse_blue.getY()!=27){
-//			System.out.println("FOUND CHEESEEEEEE!");
-//		}
-//	}
+	
+	/**
+	 * TestCode for automated mouse 
+	 */
 
 	//	private class TimerListener implements ActionListener
 	//	{

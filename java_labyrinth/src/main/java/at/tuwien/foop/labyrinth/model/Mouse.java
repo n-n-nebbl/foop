@@ -1,5 +1,9 @@
 package at.tuwien.foop.labyrinth.model;
 
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
+
 public class Mouse extends Entity {
 
 	public static final int DIRECTION_UP = 0;
@@ -11,10 +15,15 @@ public class Mouse extends Entity {
 	private int mouseDirection;
 	private int x;
 	private int y;
+	private Image img;
 	
-	public Mouse() {
+	public Mouse(int x, int y, String path) {
 		super('>');
+		this.x = x;
+		this.y = y;
 		this.id = SequenceGenerator.getNextId("Mouse");
+		ImageIcon i = new ImageIcon(path);
+		this.img = i.getImage();
 		this.mouseDirection = DIRECTION_RIGHT;
 	}
 
@@ -49,6 +58,14 @@ public class Mouse extends Entity {
 
 	public void setY(int y) {
 		this.y = y;
+	}
+	
+	public Image getImg() {
+		return img;
+	}
+
+	public void setImg(Image img) {
+		this.img = img;
 	}
 
 	private void refreshCharacter() {

@@ -99,6 +99,7 @@ public class LabyrinthView extends JPanel implements ActionListener, ImageObserv
 	}
 	
 	/**
+	 * TestCode for labyrinthsolve algorithm
 	 * TestKeyAdapter for checking if mouse moves like expected
 	 * TODO the mouse moves should work via the Events  
 	 * curaintly the view changes the model directly...
@@ -157,7 +158,7 @@ public class LabyrinthView extends JPanel implements ActionListener, ImageObserv
 	}
 	
 	/**
-	 * TestCode for automated mouse 
+	 * TestCode for automated labyrinthsolve algorithm
 	 */
 
 	//	private class TimerListener implements ActionListener

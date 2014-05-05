@@ -1,6 +1,9 @@
 package at.tuwien.foop.labyrinth.model;
 
+import java.awt.Image;
 import java.util.Date;
+
+import javax.swing.ImageIcon;
 
 public class Door extends Entity {
 
@@ -13,6 +16,7 @@ public class Door extends Entity {
 	private int id;
 	private int doorStatus;
 	private int doorDirection;
+	private Image img;
 
 	private long lastTimeChanged;
 
@@ -23,6 +27,17 @@ public class Door extends Entity {
 		this.doorDirection = DOOR_HORIZONTAL;
 		this.lastTimeChanged = 0;
 	}
+	
+	public Door(String path) {
+		super(' ');
+		this.id = SequenceGenerator.getNextId("Door");
+		this.doorStatus = DOOR_OPEN;
+		this.doorDirection = DOOR_HORIZONTAL;
+		this.lastTimeChanged = 0;
+		ImageIcon i = new ImageIcon(path);
+		this.img = i.getImage();
+	}
+	
 
 	public int getId() {
 		return id;
@@ -53,6 +68,11 @@ public class Door extends Entity {
 	public void setLastTimeChanged(long lastTimeChanged) {
 		this.lastTimeChanged = lastTimeChanged;
 	}
+	
+	public Image getImg() {
+		return img;
+	}
+
 
 	/**
 	 * @return the time between now and the last change to the door

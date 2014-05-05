@@ -12,13 +12,13 @@ import at.tuwien.foop.labyrinth.event.EventFactory;
 import at.tuwien.foop.labyrinth.model.Door;
 import at.tuwien.foop.labyrinth.model.Mouse;
 
-@Component
+
 public class GUI {
 	
 	public GUI(){
 		JFrame f = new JFrame();
 		f.setTitle("Mouse Labyrinth");
-		f.add(new LabyrinthView());
+		//f.add(new LabyrinthView());
 		f.setSize(620, 640);
 		f.setLocationRelativeTo(null);
 		f.setVisible(true);

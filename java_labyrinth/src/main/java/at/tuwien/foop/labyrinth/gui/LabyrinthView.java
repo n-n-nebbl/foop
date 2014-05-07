@@ -1,7 +1,6 @@
 package at.tuwien.foop.labyrinth.gui;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.*;
 import java.util.*;
 import java.util.List;
 
@@ -9,13 +8,8 @@ import javax.annotation.Resource;
 import javax.swing.Timer;
 import javax.swing.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import at.tuwien.foop.labyrinth.event.EventFactory;
-import at.tuwien.foop.labyrinth.event.EventHandler;
-import at.tuwien.foop.labyrinth.event.MouseMoveEvent;
-import at.tuwien.foop.labyrinth.event.MouseMoveEventHandler;
 import at.tuwien.foop.labyrinth.model.Door;
 import at.tuwien.foop.labyrinth.model.Labyrinth;
 import at.tuwien.foop.labyrinth.model.Mouse;
@@ -30,11 +24,12 @@ public class LabyrinthView extends Observable {
 	private ImageIcon closedDoorImg, openedDoorImg;
 	private JButton doorButton;
 	private int clickedButtonID;
+	private Door d;
+
 	//private Timer timer2 = new Timer(500, new TimerListener());
 
 	@Resource(name="doorList")
 	private List<Door> doors;
-
 
 	public LabyrinthView() {
 		this.startLabyrinth();
@@ -63,11 +58,11 @@ public class LabyrinthView extends Observable {
 			closedDoorImg = new ImageIcon("./images/closed_door.png");  
 			openedDoorImg = new ImageIcon("./images/opened_door.png");
 			doorButton = new JButton(closedDoorImg);
-			
-			
-//			timer = new Timer(100, this);
-//			timer.setRepeats(true);
-//			timer.start();
+			clickedButtonID = 0;
+			d = new Door();
+			timer = new Timer(100, this);
+			timer.setRepeats(true);
+			timer.start();
 
 		}
 
@@ -96,31 +91,44 @@ public class LabyrinthView extends Observable {
 						g.setColor(Color.yellow);
 						g.fillRect(x*20, y*20, 20, 20);
 					} 
-					else if(lab.getLabyrinth(x, y).equals("D")){
+					else if(lab.getLabyrinth(x, y).equals("D")){	
 						Door d = new Door();
-						doorButton = new JButton(closedDoorImg);
-						doors.add(d);
+						final JButton doorButton = new JButton(closedDoorImg);
 						doorButton.setName(""+d.getId());
-						doorButton.setBounds(x*20, y*20, 20, 20);
-						doorButton.addMouseListener(new Ml());
+						doorButton.setBounds(x*20, y*20, 20, 20); 
 						this.add(doorButton);
-						
+						doorButton.addActionListener(new ActionListener(){  
+							public void actionPerformed(ActionEvent e) {  
+								if(doorButton.getIcon()==closedDoorImg){
+									doorButton.setIcon(openedDoorImg);
+									setClickedButtonID(Integer.parseInt(doorButton.getName()));
+								} else {
+									doorButton.setIcon(closedDoorImg);
+									setClickedButtonID(Integer.parseInt(doorButton.getName()));
+								}
+							}  
+						}); 
 					}
 				}
 			}
 			g.drawImage(mouse_blue.getImg(), mouse_blue.getX()*20, mouse_blue.getY()*20,20,20, null);
 			g.drawImage(mouse_green.getImg(), mouse_green.getX()*20, mouse_green.getY()*20,20,20, null);
-			
+
 		}
-		
+
 	}
-	
-	public class Ml extends MouseAdapter{
-		public void mouseClicked(MouseEvent e){
-			clickedButtonID = Integer.parseInt(e.getComponent().getName());
-			System.out.println("B " + clickedButtonID);
-		}
+
+	public int getClickedButtonID(){
+		return this.clickedButtonID;
 	}
+
+	public void setClickedButtonID(int clickedButtonID){
+		this.clickedButtonID = clickedButtonID;
+		setChanged();
+		notifyObservers();
+	}
+
+
 }
 
 

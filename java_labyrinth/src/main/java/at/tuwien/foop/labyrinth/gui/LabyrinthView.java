@@ -8,8 +8,10 @@ import javax.annotation.Resource;
 import javax.swing.Timer;
 import javax.swing.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import at.tuwien.foop.labyrinth.event.EventFactory;
 import at.tuwien.foop.labyrinth.model.Door;
 import at.tuwien.foop.labyrinth.model.Labyrinth;
 import at.tuwien.foop.labyrinth.model.Mouse;
@@ -22,11 +24,9 @@ public class LabyrinthView extends Observable {
 	private Mouse mouse_blue, mouse_green;	
 	private Timer timer;
 	private ImageIcon closedDoorImg, openedDoorImg;
-	private JButton doorButton;
 	private int clickedButtonID;
 	private Door d;
-
-	//private Timer timer2 = new Timer(500, new TimerListener());
+	private JButton doorButton;
 
 	@Resource(name="doorList")
 	private List<Door> doors;
@@ -44,7 +44,10 @@ public class LabyrinthView extends Observable {
 		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-
+	
+	/**
+	 * InnerClass
+	 */
 	public class LabyrinthComponent extends JPanel implements ActionListener {
 
 		public LabyrinthComponent(){
@@ -53,8 +56,8 @@ public class LabyrinthView extends Observable {
 			doors = (List<Door>) ctx.getBean("doorList");
 
 			lab = new Labyrinth(31, "./maps/map.txt");
-			mouse_blue = new Mouse(1, 1, "./images/player_blue.png");
-			mouse_green = new Mouse(29, 1, "./images/player_green.png");
+			mouse_blue = new Mouse(1, 1);
+			mouse_green = new Mouse(29, 1);
 			closedDoorImg = new ImageIcon("./images/closed_door.png");  
 			openedDoorImg = new ImageIcon("./images/opened_door.png");
 			doorButton = new JButton(closedDoorImg);
@@ -65,6 +68,11 @@ public class LabyrinthView extends Observable {
 			timer.start();
 
 		}
+		
+		public Image createImage(String path){
+			ImageIcon i = new ImageIcon(path);
+			return i.getImage();
+		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -72,7 +80,7 @@ public class LabyrinthView extends Observable {
 		}
 
 		/**
-		 * creates the graphical components for the map.
+		 * creates the graphical components for the map and set it
 		 */
 		public void paintComponent(Graphics g){
 			super.paintComponent(g);
@@ -93,6 +101,7 @@ public class LabyrinthView extends Observable {
 					} 
 					else if(lab.getLabyrinth(x, y).equals("D")){	
 						Door d = new Door();
+						doors.add(d);
 						final JButton doorButton = new JButton(closedDoorImg);
 						doorButton.setName(""+d.getId());
 						doorButton.setBounds(x*20, y*20, 20, 20); 
@@ -111,8 +120,8 @@ public class LabyrinthView extends Observable {
 					}
 				}
 			}
-			g.drawImage(mouse_blue.getImg(), mouse_blue.getX()*20, mouse_blue.getY()*20,20,20, null);
-			g.drawImage(mouse_green.getImg(), mouse_green.getX()*20, mouse_green.getY()*20,20,20, null);
+			g.drawImage(this.createImage("./images/player_blue.png"), mouse_blue.getX()*20, mouse_blue.getY()*20,20,20, null);
+			g.drawImage(this.createImage("./images/player_green.png"), mouse_green.getX()*20, mouse_green.getY()*20,20,20, null);
 
 		}
 
@@ -127,7 +136,37 @@ public class LabyrinthView extends Observable {
 		setChanged();
 		notifyObservers();
 	}
+	
+	
+	/*
+	 * Just example Code
+	 */
+	
+	@Autowired
+	private EventFactory eventFactory;
 
+	@Resource(name="doorList")
+	private List<Door> doorList;
+	
+	@Resource(name="mouseList")
+	private List<Mouse> mouseList;
+	
+	
+	public EventFactory getEventFactory() {
+		return eventFactory;
+	}
+
+	public void setEventFactory(EventFactory eventFactory) {
+		this.eventFactory = eventFactory;
+	}
+
+	public void setDoorList(List<Door> doorList) {
+		this.doorList = doorList;
+	}
+
+	public void setMouseList(List<Mouse> mouseList) {
+		this.mouseList = mouseList;
+	}
 
 }
 

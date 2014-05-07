@@ -15,15 +15,12 @@ public class Mouse extends Entity {
 	private int mouseDirection;
 	private int x;
 	private int y;
-	private Image img;
 	
-	public Mouse(int x, int y, String path) {
+	public Mouse(int x, int y) {
 		super('>');
+		this.id = SequenceGenerator.getNextId("Mouse");
 		this.x = x;
 		this.y = y;
-		this.id = SequenceGenerator.getNextId("Mouse");
-		ImageIcon i = new ImageIcon(path);
-		this.img = i.getImage();
 		this.mouseDirection = DIRECTION_RIGHT;
 	}
 
@@ -58,14 +55,6 @@ public class Mouse extends Entity {
 
 	public void setY(int y) {
 		this.y = y;
-	}
-	
-	public Image getImg() {
-		return img;
-	}
-
-	public void setImg(Image img) {
-		this.img = img;
 	}
 
 	private void refreshCharacter() {

@@ -27,17 +27,6 @@ public class Door extends Entity {
 		this.doorDirection = DOOR_HORIZONTAL;
 		this.lastTimeChanged = 0;
 	}
-	
-	public Door(String path) {
-		super(' ');
-		this.id = SequenceGenerator.getNextId("Door");
-		this.doorStatus = DOOR_OPEN;
-		this.doorDirection = DOOR_HORIZONTAL;
-		this.lastTimeChanged = 0;
-		ImageIcon i = new ImageIcon(path);
-		this.img = i.getImage();
-	}
-	
 
 	public int getId() {
 		return id;

@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import at.tuwien.foop.labyrinth.gui.GUI;
+import at.tuwien.foop.labyrinth.gui.LabyrinthView;
 import at.tuwien.foop.labyrinth.model.Door;
 
 public class SpringTest {
@@ -28,7 +28,7 @@ public class SpringTest {
 
 	@Test
 	public void testAutoWire() {
-		GUI gui = ctx.getBean(GUI.class);
+		LabyrinthView gui = ctx.getBean(LabyrinthView.class);
 		assertNotNull(gui.getEventFactory());
 	}
 

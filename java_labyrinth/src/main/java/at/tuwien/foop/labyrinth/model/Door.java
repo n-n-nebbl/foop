@@ -23,7 +23,7 @@ public class Door extends Entity {
 	public Door() {
 		super(' ');
 		this.id = SequenceGenerator.getNextId("Door");
-		this.doorStatus = DOOR_OPEN;
+		this.doorStatus = DOOR_CLOSED;
 		this.doorDirection = DOOR_HORIZONTAL;
 		this.lastTimeChanged = 0;
 	}

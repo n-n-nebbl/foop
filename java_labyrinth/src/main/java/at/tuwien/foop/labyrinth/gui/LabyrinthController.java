@@ -10,7 +10,7 @@ import at.tuwien.foop.labyrinth.ContextHolder;
 import at.tuwien.foop.labyrinth.event.DoorClickedEvent;
 import at.tuwien.foop.labyrinth.event.EventBus;
 import at.tuwien.foop.labyrinth.model.Door;
-
+ 
 public class LabyrinthController implements Observer {
 
 	LabyrinthView watched;

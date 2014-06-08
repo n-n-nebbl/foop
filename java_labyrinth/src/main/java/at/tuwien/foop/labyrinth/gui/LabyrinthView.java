@@ -129,6 +129,7 @@ public class LabyrinthView extends Observable {
 		{
 			public void actionPerformed(ActionEvent e)
 			{
+				//mouse move on the path "P"
 				if(map.getField(mouse_blue.getX()+1, mouse_blue.getY()).equals("P")){
 					mouse_blue.setX(mouse_blue.getX()+1); //go right
 				} else if (map.getField(mouse_blue.getX(), mouse_blue.getY()+1).equals("P")){

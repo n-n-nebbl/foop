@@ -19,6 +19,8 @@ public class DoorClickedEventHandler implements EventHandler<DoorClickedEvent> {
 		if (d == null) {
 			System.out.println("Door not found: id(" + event.getDoorId() + ")");
 			return;
+		} else {
+			System.out.println("Door found: id(" + event.getDoorId() + ")");
 		}
 		d.setDoorStatus(event.getDoorStatus());
 	}

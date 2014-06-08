@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.tuwien.foop.labyrinth.event.Event;
-import at.tuwien.foop.labyrinth.model.Labyrinth;
+import at.tuwien.foop.labyrinth.model.Map;
 
 public class LabyrinthServerImpl implements LabyrinthServer {
 
 	private List<NetworkEventHandler> handlers;
-	private Labyrinth labyrinth;
+	private Map labyrinth;
 
 	public LabyrinthServerImpl() {
 		handlers = new ArrayList<>();
@@ -39,11 +39,11 @@ public class LabyrinthServerImpl implements LabyrinthServer {
 	}
 
 	@Override
-	public Labyrinth getLabyrinth() throws RemoteException {
+	public Map getLabyrinth() throws RemoteException {
 		return this.labyrinth;
 	}
 
-	public void setLabyrinth(Labyrinth labyrinth) {
+	public void setLabyrinth(Map labyrinth) {
 		this.labyrinth = labyrinth;
 	}
 }

@@ -30,7 +30,7 @@ public class StartLabyrinth {
 
 		bus.fireEvent(new MouseMoveEvent());
 		bus.fireEvent(new MouseMoveEvent());
-		bus.fireEvent(new DoorClickedEvent(1, Door.DOOR_OPEN));
+		bus.fireEvent(new DoorClickedEvent(0, Door.DOOR_CLOSED));
 		bus.fireEvent(new MouseMoveEvent());
 
 		ContextHolder.getContext().close();

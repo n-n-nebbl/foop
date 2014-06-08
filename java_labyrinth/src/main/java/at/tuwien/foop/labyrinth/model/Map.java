@@ -7,13 +7,13 @@ import java.util.Scanner;
 
 //the labyrinth class laods a .txt file including the map
 
-public class Labyrinth implements Serializable {
+public class Map implements Serializable {
 
 	private String path, field[];
 	private int size;
 	private Scanner sc;
 	
-	public Labyrinth(int size, String path) {
+	public Map(int size, String path) {
 		this.size = size;
 		this.path = path;
 		this.field = new String[size];
@@ -36,7 +36,7 @@ public class Labyrinth implements Serializable {
 		}
 	}
 	
-	public String getLabyrinth(int x, int y){
+	public String getField(int x, int y){
 		return field[y].substring(x,x+1);
 	}
 

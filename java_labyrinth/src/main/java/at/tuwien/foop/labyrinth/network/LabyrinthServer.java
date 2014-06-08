@@ -4,7 +4,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 import at.tuwien.foop.labyrinth.event.Event;
-import at.tuwien.foop.labyrinth.model.Labyrinth;
+import at.tuwien.foop.labyrinth.model.Map;
 
 public interface LabyrinthServer extends Remote {
 
@@ -33,5 +33,5 @@ public interface LabyrinthServer extends Remote {
 	 * @return the labyrinth generated on the server
 	 * @throws RemoteException
 	 */
-	public Labyrinth getLabyrinth() throws RemoteException;
+	public Map getLabyrinth() throws RemoteException;
 }

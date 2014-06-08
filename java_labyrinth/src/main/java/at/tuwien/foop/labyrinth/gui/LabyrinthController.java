@@ -6,6 +6,8 @@ import java.util.Observer;
 
 import javax.annotation.Resource;
 
+import org.springframework.stereotype.Component;
+
 import at.tuwien.foop.labyrinth.ContextHolder;
 import at.tuwien.foop.labyrinth.event.DoorClickedEvent;
 import at.tuwien.foop.labyrinth.event.EventBus;
@@ -13,25 +15,24 @@ import at.tuwien.foop.labyrinth.event.MouseMoveEvent;
 import at.tuwien.foop.labyrinth.model.Door;
 import at.tuwien.foop.labyrinth.model.Mouse;
 
+@Component
 public class LabyrinthController implements Observer {
 
-	LabyrinthView watched;
-	EventBus bus;
-
+	@Resource
+	private EventBus bus;
 
 	@Resource(name="doorList")
-	private List<Door> doors = (List<Door>) ContextHolder.getContext().getBean("doorList");
+	private List<Door> doors;
 	
 	@Resource(name="mouseList")
-	private List<Mouse> mouseList = (List<Mouse>) ContextHolder.getContext().getBean("mouseList");
+	private List<Mouse> mouseList;
 
-
+	@Resource
+	private LabyrinthView watched;
 
 	public void control(){
-		bus = ContextHolder.getContext().getBean(EventBus.class);
-
-		watched = new LabyrinthView();
 		watched.addObserver(this);
+		watched.startLabyrinth();
 	}
 
 	@Override

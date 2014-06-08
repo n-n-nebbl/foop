@@ -21,7 +21,8 @@ public class StartLabyrinth {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {                                           
-                LabyrinthController controller = new LabyrinthController();
+                //Falsch: LabyrinthController controller = new LabyrinthController();
+                LabyrinthController controller = ContextHolder.getContext().getBean(LabyrinthController.class); //Richtig
                 controller.control();
             }
         });  
@@ -33,7 +34,8 @@ public class StartLabyrinth {
 		bus.fireEvent(new DoorClickedEvent(0, Door.DOOR_CLOSED));
 		bus.fireEvent(new MouseMoveEvent());
 
-		ContextHolder.getContext().close();
+		//TODO: verschieben ans Ende des Programms
+		// ContextHolder.getContext().close();
 
 	}
 }

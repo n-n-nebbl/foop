@@ -136,7 +136,7 @@ public class LabyrinthView extends Observable {
 				} 
 				repaint();
 			}
-
+ 
 		}
 	}
 

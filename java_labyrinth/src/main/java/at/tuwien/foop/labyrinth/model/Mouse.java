@@ -6,18 +6,44 @@ import javax.swing.ImageIcon;
 
 public class Mouse extends Entity {
 
+	private static final long serialVersionUID = -4624485550774716174L;
 	public static final int DIRECTION_UP = 0;
 	public static final int DIRECTION_RIGHT = 1;
 	public static final int DIRECTION_DOWN = 2;
 	public static final int DIRECTION_LEFT = 3;
+	private static int lastColor = 0;
+	public static int maxColor;
 	
 	private int id;
 	private int mouseDirection;
 	private int x;
 	private int y;
+	private MouseColor mouseColor;
 	
+	public enum MouseColor 
+	{
+		RED(0), GREEN(1), BLUE(2), ORANGE(3), BROWN(4); // Must be inc +1
+
+		 private int code;
+		
+		 private MouseColor(int c) 
+		 {
+			 code = c;
+			 if(code > Mouse.maxColor)
+				 Mouse.maxColor = code;
+		 }
+		
+		 public int getCode() 
+		 {
+		   return code;
+		 }
+	}
+		
 	public Mouse(int x, int y) {
 		super('>');
+				
+		lastColor = (lastColor + 1) % maxColor;
+		this.mouseColor = MouseColor.values()[lastColor];		
 		this.id = SequenceGenerator.getNextId("Mouse");
 		this.x = x;
 		this.y = y;
@@ -55,6 +81,11 @@ public class Mouse extends Entity {
 
 	public void setY(int y) {
 		this.y = y;
+	}
+	
+	public MouseColor getColor()
+	{
+		return this.mouseColor;
 	}
 
 	private void refreshCharacter() {

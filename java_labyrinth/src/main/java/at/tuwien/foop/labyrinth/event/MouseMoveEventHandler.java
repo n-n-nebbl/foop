@@ -6,11 +6,15 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
+import at.tuwien.foop.labyrinth.gui.LabyrinthController;
 import at.tuwien.foop.labyrinth.model.Mouse;
 
 @Component
 public class MouseMoveEventHandler implements EventHandler<MouseMoveEvent> {
 
+	@Resource
+	private LabyrinthController labyrinthController;	
+	
 	@Resource(name = "mouseList")
 	private List<Mouse> mouseList;
 
@@ -28,6 +32,8 @@ public class MouseMoveEventHandler implements EventHandler<MouseMoveEvent> {
 		m.setMouseDirection(event.getNew_direction());
 		m.setX(event.getNew_x());
 		m.setY(event.getNew_y());
+		
+		labyrinthController.gotMouseEvent(event, m);
 	}
 
 	public void setMouseList(List<Mouse> mouseList) {

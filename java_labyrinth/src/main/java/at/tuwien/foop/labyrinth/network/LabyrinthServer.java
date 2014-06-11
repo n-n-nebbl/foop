@@ -3,6 +3,7 @@ package at.tuwien.foop.labyrinth.network;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+import at.tuwien.foop.labyrinth.event.DoorClickedEvent;
 import at.tuwien.foop.labyrinth.event.Event;
 import at.tuwien.foop.labyrinth.model.Map;
 
@@ -27,7 +28,7 @@ public interface LabyrinthServer extends Remote {
 	 * @param e event being fired
 	 * @throws RemoteException
 	 */
-	public void distributeEvent(Event e) throws RemoteException;
+	public void raiseDoorEvent(DoorClickedEvent e) throws RemoteException;
 	
 	/**
 	 * @return the labyrinth generated on the server

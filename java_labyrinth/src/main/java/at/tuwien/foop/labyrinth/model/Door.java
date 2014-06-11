@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 
 public class Door extends Entity {
 
+	private static final long serialVersionUID = -3570584812440078263L;
 	public static final int DOOR_OPEN = 1;
 	public static final int DOOR_CLOSED = 2;
 

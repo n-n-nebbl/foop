@@ -43,7 +43,7 @@ public class NetworkEventHandlerImpl implements NetworkEventHandler {
 		try {
 			UnicastRemoteObject.unexportObject(this, true);
 		} catch (Exception e) {
-			System.out.println("Error during unexport of NetworkEventHandler");
+			System.out.println("unexport(): Error during unexport of NetworkEventHandler");
 		}
 	}
 }

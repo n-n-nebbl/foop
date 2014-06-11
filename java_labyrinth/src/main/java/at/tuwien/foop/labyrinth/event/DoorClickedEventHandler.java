@@ -3,11 +3,16 @@ package at.tuwien.foop.labyrinth.event;
 import java.util.List;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
+
+import at.tuwien.foop.labyrinth.gui.LabyrinthController;
 import at.tuwien.foop.labyrinth.model.Door;
 
 @Component
-public class DoorClickedEventHandler implements EventHandler<DoorClickedEvent> {
-
+public class DoorClickedEventHandler implements EventHandler<DoorClickedEvent> 
+{
+	@Resource
+	private LabyrinthController labyrinthController;	
+	
 	@Resource(name = "doorList")
 	private List<Door> doorList;
 
@@ -23,6 +28,8 @@ public class DoorClickedEventHandler implements EventHandler<DoorClickedEvent> {
 			System.out.println("Door found: id(" + event.getDoorId() + ")");
 		}
 		d.setDoorStatus(event.getDoorStatus());
+		
+		labyrinthController.gotDoorEvent(event, d);
 	}
 
 	public void setDoors(List<Door> doorList) {

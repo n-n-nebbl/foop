@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public abstract class Entity implements Serializable {
 
+	private static final long serialVersionUID = 4724077628496390543L;
+	
 	protected char c;
 	
 	public Entity(char c) {

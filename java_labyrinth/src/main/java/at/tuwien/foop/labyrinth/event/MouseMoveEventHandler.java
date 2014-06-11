@@ -17,6 +17,7 @@ public class MouseMoveEventHandler implements EventHandler<MouseMoveEvent> {
 	
 	@Resource(name = "mouseList")
 	private List<Mouse> mouseList;
+	
 
 	@Override
 	public void eventFired(MouseMoveEvent event) {

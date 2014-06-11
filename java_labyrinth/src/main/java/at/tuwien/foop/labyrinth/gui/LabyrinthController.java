@@ -13,7 +13,7 @@ import at.tuwien.foop.labyrinth.ContextHolder;
 import at.tuwien.foop.labyrinth.StartLabyrinth;
 import at.tuwien.foop.labyrinth.event.DoorClickedEvent;
 import at.tuwien.foop.labyrinth.event.EventBus;
-import at.tuwien.foop.labyrinth.event.MessageEvent;
+import at.tuwien.foop.labyrinth.event.GameEvent;
 import at.tuwien.foop.labyrinth.event.MouseMoveEvent;
 import at.tuwien.foop.labyrinth.model.Door;
 import at.tuwien.foop.labyrinth.model.Map;
@@ -33,6 +33,8 @@ public class LabyrinthController implements Observer {
 
 	@Resource
 	private LabyrinthView watched;
+	
+	private Mouse ownMouse = null;
 
 	public void control() throws RemoteException{
 		watched.addObserver(this);
@@ -51,7 +53,7 @@ public class LabyrinthController implements Observer {
 	
 	// Got a door event from the bus(from the server) -> repaint
 	public void gotDoorEvent(DoorClickedEvent event, Door d)
-	{	
+	{			
 		watched.repaintAll();
 	}
 
@@ -62,10 +64,32 @@ public class LabyrinthController implements Observer {
 	}
 
 
-	public void gotTextMessageEvent(MessageEvent event) 
+	public void gotGameEvent(GameEvent event) 
 	{
-		// Print: draw
-		System.out.println("Got message event: " + event.getMessageText());
+		switch(event.getType())
+		{
+			case INFORMATION:
+				System.out.println("Game event: " + event.getMessageText());
+			break;
+			case MOUSECREATED:
+				
+				// Todo: load mouse list!
+				for(Mouse m : mouseList)
+				{
+					if(m.getId() == event.getValue())
+						this.ownMouse = m;
+				}
+				
+				if(ownMouse != null)
+				{
+					watched.setTitel(ownMouse.getColor().toString());
+					System.out.println("Game event: " + event.getMessageText());
+				}
+				else
+					System.out.println("gotGameEvent(): Error, setting mouse at the beginning.");
+					
+			break;
+		}
 	}
 	
 	// Someone clicked on the door -> send to the server

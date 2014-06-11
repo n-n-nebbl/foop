@@ -21,6 +21,7 @@
 		list-class="java.util.ArrayList">
 		<ref bean="doorClickedEventHandler" />
 		<ref bean="mouseMoveEventHandler" />
+		<ref bean="gameEventHandler" />
 	</util:list>
 
 	<bean id="eventBus" class="at.tuwien.foop.labyrinth.event.EventBus">

@@ -35,4 +35,10 @@ public interface LabyrinthServer extends Remote {
 	 * @throws RemoteException
 	 */
 	public Map getLabyrinth() throws RemoteException;
+
+	/**
+	 * @return whether the game is running
+	 * @throws RemoteException
+	 */
+	public boolean gameIsRunning() throws RemoteException;
 }

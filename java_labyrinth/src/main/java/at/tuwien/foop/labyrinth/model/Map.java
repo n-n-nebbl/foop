@@ -122,7 +122,7 @@ public class Map implements Serializable {
 		}		
 	}
 	
-	public void addMouse()
+	public Mouse addMouse()
 	{		
 		Random randomGenerator = new Random();
 		
@@ -134,10 +134,11 @@ public class Map implements Serializable {
 			int x = randomGenerator.nextInt(currentLine.size());
 			Entity e = currentLine.get(x);
 			
-			if(e.getCharacter() == 'P')
+			if(e.getClass() == Path.class)
 			{
-				this.mouseList.add(new Mouse(x, y));
-				return;
+				Mouse m = new Mouse(x, y);
+				this.mouseList.add(m);
+				return m;
 			}
 		}
 	}

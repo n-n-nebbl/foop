@@ -26,15 +26,15 @@ public class LabyrinthView extends Observable {
 
 	private Map labyrinth;
 	
+	private JFrame f;
+	
 	public LabyrinthView() {
 	}
 	
 	public void startLabyrinth(Map labyrinth)
 	{		
 		this.labyrinth = labyrinth;
-		
-		JFrame f = new JFrame();
-		f.setTitle("Mouse Labyrinth");
+		f = new JFrame();
 		f.add(labyrinthComponent);
 		f.setSize(20 * labyrinth.getWidth(), 20 * labyrinth.getHeight() + 20);
 		f.setResizable(false);
@@ -44,6 +44,18 @@ public class LabyrinthView extends Observable {
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		f.addWindowListener(new ExitWindowAdapter());
+		this.setTitel("");
+	}
+	
+	public void setTitel(String text)
+	{
+		if(f != null)
+		{
+			if(text.isEmpty())
+				f.setTitle("Mouse Labyrinth");
+			else
+				f.setTitle("Mouse Labyrinth - " + text);
+		}
 	}
 
 	public int getClickedButtonID(){
@@ -61,7 +73,7 @@ public class LabyrinthView extends Observable {
 		labyrinthComponent.repaint();
 	}
 
-	public Map getLabyrinth()
+	public Map getStartLabyrinth()
 	{
 		return this.labyrinth;
 	}

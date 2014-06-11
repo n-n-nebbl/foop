@@ -11,6 +11,8 @@ import org.springframework.beans.BeansException;
 
 import at.tuwien.foop.labyrinth.event.DoorClickedEvent;
 import at.tuwien.foop.labyrinth.event.EventBus;
+import at.tuwien.foop.labyrinth.event.GameEvent;
+import at.tuwien.foop.labyrinth.event.GameEvent.GameEventType;
 import at.tuwien.foop.labyrinth.event.MouseMoveEvent;
 import at.tuwien.foop.labyrinth.gui.LabyrinthController;
 import at.tuwien.foop.labyrinth.gui.LabyrinthView;
@@ -36,6 +38,7 @@ public class StartLabyrinth {
 		bus.fireEvent(new MouseMoveEvent());
 		bus.fireEvent(new DoorClickedEvent(0, Door.DOOR_CLOSED));
 		bus.fireEvent(new MouseMoveEvent());
+		bus.fireEvent(new GameEvent(GameEventType.INFORMATION, "Game initialising..."));
 		
 		rmiService = ContextHolder.getContext().getBean(RmiService.class);
 			
@@ -50,6 +53,7 @@ public class StartLabyrinth {
 		catch(java.rmi.server.ExportException e) // If there is already a server -> client mode
 		{
 			System.out.println("Server already running, client mode.");
+			//e.printStackTrace();
 		}
 		
 		try
@@ -59,11 +63,16 @@ public class StartLabyrinth {
 		catch(ConnectException e)
 		{
 			System.out.println("Error, connecting to the server.");			
+			e.printStackTrace();
 		}
 		
-		// Connects the bus
-		networkEventHandlerConnectedToEventBus = (NetworkEventHandler) ContextHolder.getContext().getBean("networkEventHandlerStub");
-		remote.addNetworkEventHandler(networkEventHandlerConnectedToEventBus);
+
+		if(remote.gameIsRunning())
+		{
+			System.out.println("Error, game is already running...");
+			onExit();
+			return;
+		}
 		
 		// Start the control :)
         SwingUtilities.invokeLater(new Runnable() {
@@ -78,6 +87,19 @@ public class StartLabyrinth {
 				}
             }
         });  
+
+
+		// Connects the bus
+		networkEventHandlerConnectedToEventBus = (NetworkEventHandler) ContextHolder.getContext().getBean("networkEventHandlerStub");
+		
+		try
+		{
+			remote.addNetworkEventHandler(networkEventHandlerConnectedToEventBus);
+		}
+		catch(RemoteException r)
+		{
+			System.out.println("Error, adding to the player list: " + r.toString());
+		}
 	}
 	
 	public static LabyrinthServer getLabyrinthServer()

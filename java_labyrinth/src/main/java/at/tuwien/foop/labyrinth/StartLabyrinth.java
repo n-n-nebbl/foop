@@ -116,18 +116,6 @@ public class StartLabyrinth {
 			e1.printStackTrace();
 		}
 		
-		// Todo: rmitest:
-		if(rmiService != null)
-		{
-			try {
-				rmiService.stopRegistry();
-			} 
-			catch (RemoteException e) {
-				System.out.println("Error, stopping RMI registry.");
-				e.printStackTrace();
-			}
-		}
-		
 		ContextHolder.getContext().close();
 	}
 }

@@ -82,7 +82,6 @@ public class LabyrinthController implements Observer {
 
 				watched.startLabyrinth(map);
 				
-				// Todo: load mouse list!
 				for(Mouse m : mouseList)
 				{
 					if(m.getId() == event.getValue())

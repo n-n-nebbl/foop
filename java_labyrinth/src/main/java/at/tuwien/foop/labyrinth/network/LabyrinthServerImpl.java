@@ -61,7 +61,6 @@ public class LabyrinthServerImpl implements LabyrinthServer {
 	}
 	
 	// TODO: wenn das spiel bereits läuft -> ...
-	// Todo: eine maus fehlt wenn man 2 startet (in einem fenster)
 	public void startGame()
 	{
 		this.running = true;
@@ -86,6 +85,7 @@ public class LabyrinthServerImpl implements LabyrinthServer {
 		}
 	}
 	
+	// TODO: nur prüfen, nicht setzen
 	@Override
 	public void raiseDoorEvent(DoorClickedEvent event) throws RemoteException 
 	{

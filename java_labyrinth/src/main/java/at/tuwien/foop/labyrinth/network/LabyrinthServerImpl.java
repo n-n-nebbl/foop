@@ -60,17 +60,25 @@ public class LabyrinthServerImpl implements LabyrinthServer {
 		return this.running;
 	}
 	
+	// TODO: wenn das spiel bereits läuft -> ...
+	// Todo: eine maus fehlt wenn man 2 startet (in einem fenster)
 	public void startGame()
 	{
 		this.running = true;
 		timer = new Timer(500, new TimerListener());
 		timer.start();
+		
+		ArrayList<Mouse> mouseList = new ArrayList<Mouse>();
+		
+		// Adds all mouses
+		for(int i = 0; i < handlers.size(); i++) 
+			mouseList.add(labyrinth.addMouse());		
 				
-		for (NetworkEventHandler handler : handlers) 
+		// Sends an event to get the labyrinth
+		for (int i = 0; i < handlers.size(); i++) 
 		{
-			Mouse m = labyrinth.addMouse();
 			try {
-				handler.fireEvent(new GameEvent(GameEventType.MOUSECREATED, "Game started by a click. You got the " + m.getColor().toString() + " mouse.", m.getId()));
+				handlers.get(i).fireEvent(new GameEvent(GameEventType.GAMESTARTED, "Game started by a player. You got the " + mouseList.get(i).getColor().toString() + " mouse.", mouseList.get(i).getId()));
 			} catch (RemoteException e) {
 				System.out.println("startGame(): Error sending events, " + e.toString());
 				e.printStackTrace();
@@ -82,10 +90,7 @@ public class LabyrinthServerImpl implements LabyrinthServer {
 	public void raiseDoorEvent(DoorClickedEvent event) throws RemoteException 
 	{
 		if(!gameIsRunning())
-		{
-			startGame(); // Todo: replace? Or not?
-			//return;
-		}
+			return;
 		
 		for(Door d : labyrinth.getDoorList())
 		{

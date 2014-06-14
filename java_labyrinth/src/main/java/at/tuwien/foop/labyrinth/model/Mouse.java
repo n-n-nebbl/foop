@@ -21,7 +21,7 @@ public class Mouse extends Entity {
 	
 	public enum MouseColor 
 	{
-		RED(0), GREEN(1), BLUE(2), ORANGE(3), BROWN(4); // Must be inc +1
+		RED(2), GREEN(1), BLUE(0), ORANGE(3), BROWN(4); // Must be inc +1
 		public static int maxColor = 4;
 		
 		private int code;
@@ -40,7 +40,7 @@ public class Mouse extends Entity {
 	public Mouse(int x, int y) {
 		super('>');
 				
-		lastColor = (lastColor + 1) % (MouseColor.maxColor);
+		lastColor = (lastColor + 1) % (MouseColor.maxColor); // Todo: fix order
 		this.mouseColor = MouseColor.values()[lastColor];		
 		this.id = SequenceGenerator.getNextId("Mouse");
 		this.x = x;

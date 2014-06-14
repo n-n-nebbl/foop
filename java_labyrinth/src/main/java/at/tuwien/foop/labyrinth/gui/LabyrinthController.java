@@ -38,17 +38,6 @@ public class LabyrinthController implements Observer {
 
 	public void control() throws RemoteException{
 		watched.addObserver(this);
-		
-		// Init labyrinth
-		Map map = StartLabyrinth.getLabyrinthServer().getLabyrinth();
-		
-		for(Door d : map.getDoorList())
-			doors.add(d);
-
-		for(Mouse m : map.getMouseList())
-			mouseList.add(m);
-
-		watched.startLabyrinth(map);
 	}
 	
 	// Got a door event from the bus(from the server) -> repaint
@@ -71,7 +60,27 @@ public class LabyrinthController implements Observer {
 			case INFORMATION:
 				System.out.println("Game event: " + event.getMessageText());
 			break;
-			case MOUSECREATED:
+			case GAMESTARTED:
+				
+				// Init labyrinth
+				Map map;
+				try {
+					map = StartLabyrinth.getLabyrinthServer().getLabyrinth();
+				} catch (RemoteException e) 
+				{
+
+					System.out.println("gotGameEvent(): Error, getting the map.");
+					e.printStackTrace();
+					return;
+				}
+				
+				for(Door d : map.getDoorList())
+					doors.add(d);
+
+				for(Mouse m : map.getMouseList())
+					mouseList.add(m);
+
+				watched.startLabyrinth(map);
 				
 				// Todo: load mouse list!
 				for(Mouse m : mouseList)

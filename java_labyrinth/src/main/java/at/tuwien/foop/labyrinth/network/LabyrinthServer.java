@@ -41,4 +41,9 @@ public interface LabyrinthServer extends Remote {
 	 * @throws RemoteException
 	 */
 	public boolean gameIsRunning() throws RemoteException;
+
+	/**
+	 * @throws RemoteException
+	 */
+	public void startGame() throws RemoteException;
 }

@@ -1,6 +1,9 @@
 package at.tuwien.foop.labyrinth.gui;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Observable;
 
@@ -10,6 +13,7 @@ import javax.swing.*;
 import org.springframework.stereotype.Component;
 
 import at.tuwien.foop.labyrinth.StartLabyrinth;
+import at.tuwien.foop.labyrinth.event.DoorClickedEvent;
 import at.tuwien.foop.labyrinth.model.Door;
 import at.tuwien.foop.labyrinth.model.Map;
 
@@ -29,10 +33,39 @@ public class LabyrinthView extends Observable {
 	private JFrame f;
 	
 	public LabyrinthView() {
+		// Start window
+		f = new JFrame();
+		f.setSize(300, 100);
+		f.setResizable(false);
+		f.setLocationRelativeTo(null);
+		f.setVisible(true);
+		f.setLayout(null);
+		this.setTitel("Waiting for start...");
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.addWindowListener(new ExitWindowAdapter());
+		
+		JButton startButton = new JButton("Start game!");
+		startButton.setBounds(5, 5, 290, 50); 
+		
+		// Todo: MVC Concept?
+		startButton.addActionListener(new ActionListener(){  
+			public void actionPerformed(ActionEvent e) { 
+				try {
+					StartLabyrinth.getLabyrinthServer().startGame();
+				} catch (RemoteException e1) {
+					System.out.println("LabyrinthView(): Error, distributing event.");
+					e1.printStackTrace();
+				}
+			}  
+		}); 
+		
+		f.add(startButton);
+		
 	}
 	
 	public void startLabyrinth(Map labyrinth)
 	{		
+		f.setVisible(false);
 		this.labyrinth = labyrinth;
 		f = new JFrame();
 		f.add(labyrinthComponent);

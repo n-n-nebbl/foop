@@ -93,9 +93,9 @@ public class LabyrinthView extends Observable
 			for (Mouse m : mouseList)
 			{
 				if (m.getId() == wonID)
-					JOptionPane.showMessageDialog(f,
-							"Game ended, player <" + m.getColor() + "> won!",
-							"Game ended", JOptionPane.PLAIN_MESSAGE);
+				{
+					(new Thread(new DialogRunnable(m))).start();
+				}
 			}
 
 		}
@@ -158,7 +158,7 @@ public class LabyrinthView extends Observable
 		this.setTitel("");
 	}
 
-	class ExitWindowAdapter extends WindowAdapter
+	private class ExitWindowAdapter extends WindowAdapter
 	{
 		// Close the labyrinth and exit
 		public void windowClosing(WindowEvent e)
@@ -166,6 +166,23 @@ public class LabyrinthView extends Observable
 
 			StartLabyrinth.onExit();
 			System.exit(0);
+		}
+	}
+
+	private class DialogRunnable implements Runnable
+	{
+		private Mouse wonMouse;
+
+		public DialogRunnable(Mouse wonMouse)
+		{
+			this.wonMouse = wonMouse;
+		}
+
+		public void run()
+		{
+			JOptionPane.showMessageDialog(null, "Game ended, player <"
+					+ wonMouse.getColor() + "> won!", "Game ended",
+					JOptionPane.PLAIN_MESSAGE);
 		}
 	}
 

@@ -108,8 +108,19 @@ public class LabyrinthController implements Observer {
 		
 		// Distribute the door event to the server
 		try {
-			// Status will be set by the server
-			StartLabyrinth.getLabyrinthServer().raiseDoorEvent(new DoorClickedEvent(watched.getClickedButtonID(), -1));
+			
+			Door d = null;
+			
+			for(Door door : this.doors)
+			{
+				if(door.getId() == watched.getClickedButtonID())
+					d = door;
+			}
+			
+			if(d == null)
+				return;
+			
+			StartLabyrinth.getLabyrinthServer().raiseDoorEvent(new DoorClickedEvent(watched.getClickedButtonID(), (d.getDoorStatus() == Door.DOOR_CLOSED) ? Door.DOOR_OPEN : Door.DOOR_CLOSED));
 		} 
 		catch (RemoteException e)
 		{

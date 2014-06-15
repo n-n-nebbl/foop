@@ -98,6 +98,9 @@ public class LabyrinthServerImpl implements LabyrinthServer {
 			{
 				int status = (d.getDoorStatus() == Door.DOOR_CLOSED) ? Door.DOOR_OPEN : Door.DOOR_CLOSED;
 				
+				if(status != event.getDoorStatus()) // Drop this
+					return;
+				
 				event.setDoorStatus(status);
 				d.setDoorStatus(status);
 				

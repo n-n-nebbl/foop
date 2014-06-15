@@ -67,7 +67,7 @@ public class LabyrinthServerImpl implements LabyrinthServer {
 			return;
 		
 		this.running = true;
-		timer = new Timer(1000, new GameRoundTimer(this));
+		timer = new Timer(1000, new GameRoundTimer());
 		timer.start();
 		
 		ArrayList<Mouse> mouseList = new ArrayList<Mouse>();
@@ -121,19 +121,12 @@ public class LabyrinthServerImpl implements LabyrinthServer {
 		
 
 	private class GameRoundTimer implements ActionListener
-	{
-		LabyrinthServer server;
-		
-		public GameRoundTimer(LabyrinthServer server)
-		{
-			this.server = server;
-		}
-		
+	{		
 		public void actionPerformed(ActionEvent e)
 		{	
 			try 
 			{
-				for(Mouse mouse : this.server.getLabyrinth().getMouseList())
+				for(Mouse mouse : getLabyrinth().getMouseList())
 				{
 					int moveDirection = Mouse.DIRECTION_DOWN; // Todo: spielelogik -> was tun?
 					

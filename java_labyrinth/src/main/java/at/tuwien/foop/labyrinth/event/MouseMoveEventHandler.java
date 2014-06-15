@@ -27,9 +27,10 @@ public class MouseMoveEventHandler implements EventHandler<MouseMoveEvent> {
 			System.out.println("Mouse not found: id(" + event.getMouseID()
 					+ ")");
 			return;
-		} else {
-			System.out.println("Mouse found: id(" + event.getMouseID());
-		}
+		} 
+		//else {
+		//	System.out.println("Mouse found: id(" + event.getMouseID());
+		//}
 		m.setMouseDirection(event.getNew_direction());
 		m.setX(event.getNew_x());
 		m.setY(event.getNew_y());

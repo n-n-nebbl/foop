@@ -63,6 +63,9 @@ public class LabyrinthServerImpl implements LabyrinthServer {
 	// TODO: wenn das spiel bereits läuft -> ...
 	public void startGame()
 	{
+		if(this.running)
+			return;
+		
 		this.running = true;
 		timer = new Timer(500, new TimerListener());
 		timer.start();

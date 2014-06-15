@@ -51,7 +51,16 @@ public class LabyrinthView extends Observable {
 		startButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e) { 
 				try {
-					StartLabyrinth.getLabyrinthServer().startGame();
+					
+					if(StartLabyrinth.getLabyrinthServer().gameIsRunning())
+					{
+						System.out.println("LabyrinthView(): Error, game already running.");
+						StartLabyrinth.onExit();
+						System.exit(0);
+						return;
+					}
+					else
+						StartLabyrinth.getLabyrinthServer().startGame();
 				} catch (RemoteException e1) {
 					System.out.println("LabyrinthView(): Error, distributing event.");
 					e1.printStackTrace();

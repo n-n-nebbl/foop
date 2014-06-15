@@ -106,9 +106,6 @@ public class LabyrinthServerImpl implements LabyrinthServer {
 				
 				event.setDoorStatus(status);
 				d.setDoorStatus(status);
-				
-				//System.out.println("distributeEvent(): " + event.toString());
-				//System.out.println("distributeEvent(): to " + handlers.size() + " handlers.");
 					
 				// Distribute to all people
 				for (NetworkEventHandler handler : handlers) 
@@ -119,13 +116,23 @@ public class LabyrinthServerImpl implements LabyrinthServer {
 		}
 	}
 		
+	private void stopGame(Mouse mouseWon) throws RemoteException
+	{		
+		this.timer.stop();
+		this.running = false;
+				
+		for (NetworkEventHandler handler : handlers) 
+		{			
+			handler.fireEvent(new GameEvent(GameEvent.GameEventType.GAMEENDED, "Ended", mouseWon.getId()));
+		}
+	}
 
 	private class GameRoundTimer implements ActionListener
 	{		
 		public void actionPerformed(ActionEvent e)
 		{	
 			try 
-			{
+			{				
 				for(Mouse mouse : getLabyrinth().getMouseList())
 				{
 					int moveDirection = Mouse.DIRECTION_DOWN; // Todo: spielelogik -> was tun?
@@ -167,6 +174,12 @@ public class LabyrinthServerImpl implements LabyrinthServer {
 					for (NetworkEventHandler handler : handlers) 
 					{			
 						handler.fireEvent(event);
+					}
+					
+					if(false) // Game ended
+					{
+						stopGame(mouse);
+						return;
 					}
 				}
 			} catch (RemoteException e1) {

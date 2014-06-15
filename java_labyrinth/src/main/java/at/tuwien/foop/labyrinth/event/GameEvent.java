@@ -6,7 +6,7 @@ public class GameEvent implements Event
 {
 	public enum GameEventType 
 	{
-		INFORMATION, GAMESTARTED
+		INFORMATION, GAMESTARTED, GAMEENDED
 	}		
 
 	private GameEventType type;

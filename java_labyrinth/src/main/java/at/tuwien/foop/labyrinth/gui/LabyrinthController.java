@@ -57,6 +57,10 @@ public class LabyrinthController implements Observer {
 	{
 		switch(event.getType())
 		{
+			case GAMEENDED:
+				watched.setGameStop();
+				System.out.println("Game event: " + event.getMessageText());
+			break;
 			case INFORMATION:
 				System.out.println("Game event: " + event.getMessageText());
 			break;
@@ -74,13 +78,15 @@ public class LabyrinthController implements Observer {
 					return;
 				}
 				
+				doors.clear();
 				for(Door d : map.getDoorList())
 					doors.add(d);
 
+				mouseList.clear();
 				for(Mouse m : map.getMouseList())
 					mouseList.add(m);
 
-				watched.startLabyrinth(map);
+				watched.setGameRunning(map);
 				
 				for(Mouse m : mouseList)
 				{

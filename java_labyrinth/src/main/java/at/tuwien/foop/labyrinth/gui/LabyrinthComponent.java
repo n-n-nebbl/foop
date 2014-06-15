@@ -45,7 +45,7 @@ public class LabyrinthComponent extends JPanel implements ActionListener {
 		closedDoorImg = new ImageIcon("./images/closed_door.png");  
 		openedDoorImg = new ImageIcon("./images/opened_door.png");
 	}
-
+	
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 

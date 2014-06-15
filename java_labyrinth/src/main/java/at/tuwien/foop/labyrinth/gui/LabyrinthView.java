@@ -16,6 +16,7 @@ import at.tuwien.foop.labyrinth.StartLabyrinth;
 import at.tuwien.foop.labyrinth.event.DoorClickedEvent;
 import at.tuwien.foop.labyrinth.model.Door;
 import at.tuwien.foop.labyrinth.model.Map;
+import at.tuwien.foop.labyrinth.network.LabyrinthServer;
 
 @Component
 public class LabyrinthView extends Observable {
@@ -32,7 +33,47 @@ public class LabyrinthView extends Observable {
 	
 	private JFrame f;
 	
-	public LabyrinthView() {
+	public LabyrinthView()
+	{
+		setGameStop();
+	}
+		
+	public void setTitel(String text)
+	{
+		if(f != null)
+		{
+			if(text.isEmpty())
+				f.setTitle("Mouse Labyrinth");
+			else
+				f.setTitle("Mouse Labyrinth - " + text);
+		}
+	}
+
+	public int getClickedButtonID(){
+		return this.clickedButtonID;
+	}
+
+	public void setClickedButtonID(int clickedButtonID){
+		this.clickedButtonID = clickedButtonID;
+		setChanged();
+		notifyObservers();
+	}
+	
+	public void repaintAll()
+	{
+		labyrinthComponent.repaint();
+	}
+
+	public Map getStartLabyrinth()
+	{
+		return this.labyrinth;
+	}
+
+	public void setGameStop()
+	{
+		if(f != null)
+			f.setVisible(false);
+		
 		// Start window
 		f = new JFrame();
 		f.setSize(300, 100);
@@ -67,12 +108,13 @@ public class LabyrinthView extends Observable {
 		}); 
 		
 		f.add(startButton);
-		
 	}
 	
-	public void startLabyrinth(Map labyrinth)
-	{		
-		f.setVisible(false);
+	public void setGameRunning(Map labyrinth)
+	{
+		if(f != null)
+			f.setVisible(false);
+		
 		this.labyrinth = labyrinth;
 		f = new JFrame();
 		f.add(labyrinthComponent);
@@ -85,39 +127,8 @@ public class LabyrinthView extends Observable {
 
 		f.addWindowListener(new ExitWindowAdapter());
 		this.setTitel("");
-	}
+	}	
 	
-	public void setTitel(String text)
-	{
-		if(f != null)
-		{
-			if(text.isEmpty())
-				f.setTitle("Mouse Labyrinth");
-			else
-				f.setTitle("Mouse Labyrinth - " + text);
-		}
-	}
-
-	public int getClickedButtonID(){
-		return this.clickedButtonID;
-	}
-
-	public void setClickedButtonID(int clickedButtonID){
-		this.clickedButtonID = clickedButtonID;
-		setChanged();
-		notifyObservers();
-	}
-	
-	public void repaintAll()
-	{
-		labyrinthComponent.repaint();
-	}
-
-	public Map getStartLabyrinth()
-	{
-		return this.labyrinth;
-	}
-
 	class ExitWindowAdapter extends WindowAdapter
 	{
 		// Close the labyrinth and exit

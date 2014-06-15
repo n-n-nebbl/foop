@@ -16,6 +16,7 @@ import at.tuwien.foop.labyrinth.StartLabyrinth;
 import at.tuwien.foop.labyrinth.event.DoorClickedEvent;
 import at.tuwien.foop.labyrinth.model.Door;
 import at.tuwien.foop.labyrinth.model.Map;
+import at.tuwien.foop.labyrinth.model.Mouse;
 import at.tuwien.foop.labyrinth.network.LabyrinthServer;
 
 @Component
@@ -25,6 +26,9 @@ public class LabyrinthView extends Observable {
 
 	@Resource(name="doorList")
 	private List<Door> doorList;
+
+	@Resource(name="mouseList")
+	private List<Mouse> mouseList;
 	
 	@Resource
 	private LabyrinthComponent labyrinthComponent;
@@ -71,6 +75,22 @@ public class LabyrinthView extends Observable {
 
 	public void setGameStop()
 	{
+		this.setGameStop(-1);
+	}	
+	
+	public void setGameStop(int wonID)
+	{
+		if(wonID != -1 && f != null)
+		{
+			for(Mouse m: mouseList)
+			{
+				if(m.getId() == wonID)
+					JOptionPane.showMessageDialog(f, "Game ended, player <" + m.getColor() + "> won!", "Game ended",
+						    JOptionPane.PLAIN_MESSAGE);				
+			}
+			
+		}
+		
 		if(f != null)
 			f.setVisible(false);
 		

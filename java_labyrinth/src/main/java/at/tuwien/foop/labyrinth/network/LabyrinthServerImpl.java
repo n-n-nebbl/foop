@@ -176,7 +176,7 @@ public class LabyrinthServerImpl implements LabyrinthServer {
 						handler.fireEvent(event);
 					}
 					
-					if(false) // Game ended
+					if(true) // Game ended
 					{
 						stopGame(mouse);
 						return;

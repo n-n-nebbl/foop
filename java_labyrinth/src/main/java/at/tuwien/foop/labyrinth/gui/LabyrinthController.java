@@ -58,7 +58,7 @@ public class LabyrinthController implements Observer {
 		switch(event.getType())
 		{
 			case GAMEENDED:
-				watched.setGameStop();
+				watched.setGameStop(event.getValue());
 				System.out.println("Game event: " + event.getMessageText());
 			break;
 			case INFORMATION:

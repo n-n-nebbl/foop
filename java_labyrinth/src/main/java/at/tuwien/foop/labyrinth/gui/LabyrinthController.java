@@ -9,7 +9,6 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
-import at.tuwien.foop.labyrinth.ContextHolder;
 import at.tuwien.foop.labyrinth.StartLabyrinth;
 import at.tuwien.foop.labyrinth.event.DoorClickedEvent;
 import at.tuwien.foop.labyrinth.event.EventBus;
@@ -20,123 +19,130 @@ import at.tuwien.foop.labyrinth.model.Map;
 import at.tuwien.foop.labyrinth.model.Mouse;
 
 @Component
-public class LabyrinthController implements Observer {
+public class LabyrinthController implements Observer
+{
 
 	@Resource
 	private EventBus bus;
 
-	@Resource(name="doorList")
+	@Resource(name = "doorList")
 	private List<Door> doors;
-	
-	@Resource(name="mouseList")
+
+	@Resource(name = "mouseList")
 	private List<Mouse> mouseList;
 
 	@Resource
 	private LabyrinthView watched;
-	
+
 	private Mouse ownMouse = null;
 
-	public void control() throws RemoteException{
+	public void control() throws RemoteException
+	{
 		watched.addObserver(this);
 	}
-	
+
 	// Got a door event from the bus(from the server) -> repaint
 	public void gotDoorEvent(DoorClickedEvent event, Door d)
-	{			
+	{
 		watched.repaintAll();
 	}
 
 	// Got a mouse event from the bus(from the server) -> repaint
 	public void gotMouseEvent(MouseMoveEvent event, Mouse m)
-	{	
-		watched.repaintAll();		
+	{
+		watched.repaintAll();
 	}
 
-
-	public void gotGameEvent(GameEvent event) 
+	public void gotGameEvent(GameEvent event)
 	{
-		switch(event.getType())
+		switch (event.getType())
 		{
-			case GAMEENDED:
-				watched.setGameStop(event.getValue());
-				System.out.println("Game event: " + event.getMessageText());
+		case GAMEENDED:
+			watched.waitForGameStart(event.getValue());
+			System.out.println("Game event: " + event.getMessageText());
 			break;
-			case INFORMATION:
-				System.out.println("Game event: " + event.getMessageText());
+		case INFORMATION:
+			System.out.println("Game event: " + event.getMessageText());
 			break;
-			case GAMESTARTED:
-				
-				// Init labyrinth
-				Map map;
-				try {
-					map = StartLabyrinth.getLabyrinthServer().getLabyrinth();
-				} catch (RemoteException e) 
-				{
+		case GAMESTARTED:
 
-					System.out.println("gotGameEvent(): Error, getting the map.");
-					e.printStackTrace();
-					return;
-				}
-				
-				doors.clear();
-				for(Door d : map.getDoorList())
-					doors.add(d);
+			// Init labyrinth
+			Map map;
+			try
+			{
+				map = StartLabyrinth.getLabyrinthServer().getLabyrinth();
+			} catch (RemoteException e)
+			{
 
-				mouseList.clear();
-				for(Mouse m : map.getMouseList())
-					mouseList.add(m);
+				System.out.println("gotGameEvent(): Error, getting the map.");
+				e.printStackTrace();
+				return;
+			}
 
-				watched.setGameRunning(map);
-				
-				for(Mouse m : mouseList)
-				{
-					if(m.getId() == event.getValue())
-						this.ownMouse = m;
-				}
-				
-				if(ownMouse != null)
-				{
-					watched.setTitel(ownMouse.getColor().toString());
-					System.out.println("Game event: " + event.getMessageText());
-				}
-				else
-					System.out.println("gotGameEvent(): Error, setting mouse at the beginning.");
-					
+			doors.clear();
+			for (Door d : map.getDoorList())
+				doors.add(d);
+
+			mouseList.clear();
+			for (Mouse m : map.getMouseList())
+				mouseList.add(m);
+
+			watched.setGameRunning(map);
+
+			for (Mouse m : mouseList)
+			{
+				if (m.getId() == event.getValue())
+					this.ownMouse = m;
+			}
+
+			if (ownMouse != null)
+			{
+				watched.setTitel(ownMouse.getColor().toString());
+				System.out.println("Game event: " + event.getMessageText());
+			} else
+				System.out
+						.println("gotGameEvent(): Error, setting mouse at the beginning.");
+
 			break;
 		}
 	}
-	
+
 	// Someone clicked on the door -> send to the server
 	@Override
-	public void update(Observable o, Object arg) {		
-					
-		//System.out.println("Observer Update Door:  " + watched.getClickedButtonID());
-		
+	public void update(Observable o, Object arg)
+	{
+
+		// System.out.println("Observer Update Door:  " +
+		// watched.getClickedButtonID());
+
 		// Distribute the door event to the server
-		try {
-			
+		try
+		{
+
 			Door d = null;
-			
-			for(Door door : this.doors)
+
+			for (Door door : this.doors)
 			{
-				if(door.getId() == watched.getClickedButtonID())
+				if (door.getId() == watched.getClickedButtonID())
 					d = door;
 			}
-			
-			if(d == null)
+
+			if (d == null)
 				return;
-			
-			StartLabyrinth.getLabyrinthServer().raiseDoorEvent(new DoorClickedEvent(watched.getClickedButtonID(), (d.getDoorStatus() == Door.DOOR_CLOSED) ? Door.DOOR_OPEN : Door.DOOR_CLOSED));
-		} 
-		catch (RemoteException e)
+
+			StartLabyrinth
+					.getLabyrinthServer()
+					.raiseDoorEvent(
+							new DoorClickedEvent(
+									watched.getClickedButtonID(),
+									(d.getDoorStatus() == Door.DOOR_CLOSED) ? Door.DOOR_OPEN
+											: Door.DOOR_CLOSED));
+		} catch (RemoteException e)
 		{
 			System.out.println("Error, distributing event.");
 			e.printStackTrace();
 		}
-		
+
 	}
 
 }
-
-
-

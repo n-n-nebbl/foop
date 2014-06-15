@@ -49,15 +49,13 @@ public class LabyrinthView extends Observable {
 		
 		// Todo: MVC Concept?
 		startButton.addActionListener(new ActionListener(){  
-			public void actionPerformed(ActionEvent e) { 
-				try {
-					
+			public void actionPerformed(ActionEvent e) 
+			{				
+				try 
+				{					
 					if(StartLabyrinth.getLabyrinthServer().gameIsRunning())
 					{
 						System.out.println("LabyrinthView(): Error, game already running.");
-						StartLabyrinth.onExit();
-						System.exit(0);
-						return;
 					}
 					else
 						StartLabyrinth.getLabyrinthServer().startGame();

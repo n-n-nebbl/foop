@@ -67,7 +67,7 @@ public class LabyrinthServerImpl implements LabyrinthServer {
 			return;
 		
 		this.running = true;
-		timer = new Timer(500, new TimerListener());
+		timer = new Timer(1000, new GameRoundTimer(this));
 		timer.start();
 		
 		ArrayList<Mouse> mouseList = new ArrayList<Mouse>();
@@ -118,47 +118,68 @@ public class LabyrinthServerImpl implements LabyrinthServer {
 			}
 		}
 	}
-	
-	/*
-	MouseMoveEvent createMouseMoveEvent(Mouse mouse, int moveDirection, int newX, int newY) {
-	MouseMoveEvent event = new MouseMoveEvent();
-	event.setOld_direction(mouse.getMouseDirection());
-	event.setOld_x(mouse.getX());
-	event.setOld_y(mouse.getY());
-	
-	//int newX, newY;
-	newX = mouse.getX();
-	newY = mouse.getY();
-	
-	switch(moveDirection) {
-	case Mouse.DIRECTION_UP:
-		newY--;
-		break;
-	case Mouse.DIRECTION_RIGHT:
-		newX++;
-		break;
-	case Mouse.DIRECTION_LEFT:
-		newX--;
-		break;
-	case Mouse.DIRECTION_DOWN:
-		newY++;
-		break;
-	}
-	
-	event.setNew_direction(moveDirection);
-	event.setNew_x(newX);
-	event.setNew_y(newY);
-	
-	return event;
-}
-*/
-	
+		
 
-	private class TimerListener implements ActionListener
+	private class GameRoundTimer implements ActionListener
 	{
-		public void actionPerformed(ActionEvent e)
+		LabyrinthServer server;
+		
+		public GameRoundTimer(LabyrinthServer server)
 		{
-			// Zeug, dass iwas bewegt oder so...
+			this.server = server;
+		}
+		
+		public void actionPerformed(ActionEvent e)
+		{	
+			try 
+			{
+				for(Mouse mouse : this.server.getLabyrinth().getMouseList())
+				{
+					int moveDirection = Mouse.DIRECTION_DOWN; // Todo: spielelogik -> was tun?
+					
+					MouseMoveEvent event = new MouseMoveEvent();
+					event.setMouseID(mouse.getId());
+					event.setOld_direction(mouse.getMouseDirection());
+					event.setOld_x(mouse.getX());
+					event.setOld_y(mouse.getY());
+					
+					int newX, newY;
+					newX = mouse.getX();
+					newY = mouse.getY();
+					
+					switch(moveDirection) 
+					{
+						case Mouse.DIRECTION_UP:
+							newY--;
+							break;
+						case Mouse.DIRECTION_RIGHT:
+							newX++;
+							break;
+						case Mouse.DIRECTION_LEFT:
+							newX--;
+							break;
+						case Mouse.DIRECTION_DOWN:
+							newY++;
+							break;
+					}
+					
+					event.setNew_direction(moveDirection);
+					event.setNew_x(newX);
+					event.setNew_y(newY);
+					
+					mouse.setX(newX);
+					mouse.setY(newY);
+					mouse.setMouseDirection(moveDirection);
+					
+					for (NetworkEventHandler handler : handlers) 
+					{			
+						handler.fireEvent(event);
+					}
+				}
+			} catch (RemoteException e1) {
+				System.out.println("actionPerformed(): Error, calling the labyrinth");
+				e1.printStackTrace();
+			}
 		}
 	
 	}

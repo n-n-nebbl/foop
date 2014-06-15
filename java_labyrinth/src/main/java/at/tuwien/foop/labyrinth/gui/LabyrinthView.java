@@ -84,6 +84,10 @@ public class LabyrinthView extends Observable
 
 	public void waitForGameStart(int wonID)
 	{
+
+		if (f != null)
+			f.setVisible(false);
+
 		if (wonID != -1 && f != null)
 		{
 			for (Mouse m : mouseList)
@@ -95,9 +99,6 @@ public class LabyrinthView extends Observable
 			}
 
 		}
-
-		if (f != null)
-			f.setVisible(false);
 
 		// Start window
 		f = new JFrame();

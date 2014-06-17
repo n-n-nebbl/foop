@@ -4,7 +4,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class ContextHolder
 {
-
 	private static ClassPathXmlApplicationContext ctx;
 
 	static

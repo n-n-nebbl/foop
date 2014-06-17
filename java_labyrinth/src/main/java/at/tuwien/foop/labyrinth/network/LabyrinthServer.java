@@ -19,11 +19,16 @@ public interface LabyrinthServer extends Remote
 	public void addNetworkEventHandler(NetworkEventHandler handler) throws RemoteException;
 
 	/**
-	 * 
-	 * @param handler
+	 * @return whether the game is running
 	 * @throws RemoteException
 	 */
-	public void removeNetworkEventHandler(NetworkEventHandler handler) throws RemoteException;
+	public boolean gameIsRunning() throws RemoteException;
+
+	/**
+	 * @return the labyrinth generated on the server
+	 * @throws RemoteException
+	 */
+	public Map getLabyrinth() throws RemoteException;
 
 	/**
 	 * Fires given Event on all registered NetworkEventHandlers
@@ -35,16 +40,11 @@ public interface LabyrinthServer extends Remote
 	public void raiseDoorEvent(DoorClickedEvent e) throws RemoteException;
 
 	/**
-	 * @return the labyrinth generated on the server
+	 * 
+	 * @param handler
 	 * @throws RemoteException
 	 */
-	public Map getLabyrinth() throws RemoteException;
-
-	/**
-	 * @return whether the game is running
-	 * @throws RemoteException
-	 */
-	public boolean gameIsRunning() throws RemoteException;
+	public void removeNetworkEventHandler(NetworkEventHandler handler) throws RemoteException;
 
 	/**
 	 * @throws RemoteException

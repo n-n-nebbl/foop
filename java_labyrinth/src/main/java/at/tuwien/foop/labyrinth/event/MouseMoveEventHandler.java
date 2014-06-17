@@ -12,7 +12,6 @@ import at.tuwien.foop.labyrinth.model.Mouse;
 @Component
 public class MouseMoveEventHandler implements EventHandler<MouseMoveEvent>
 {
-
 	@Resource
 	private LabyrinthController labyrinthController;
 
@@ -32,22 +31,10 @@ public class MouseMoveEventHandler implements EventHandler<MouseMoveEvent>
 		// else {
 		// System.out.println("Mouse found: id(" + event.getMouseID());
 		// }
-		m.setMouseDirection(event.getNew_direction());
-		m.setX(event.getNew_x());
-		m.setY(event.getNew_y());
+		m.setState(event.getNewState());
+		m.setOldState(event.getOldState());
 
 		labyrinthController.gotMouseEvent(event, m);
-	}
-
-	public void setMouseList(List<Mouse> mouseList)
-	{
-		this.mouseList = mouseList;
-	}
-
-	@Override
-	public Class<MouseMoveEvent> getEventClass()
-	{
-		return MouseMoveEvent.class;
 	}
 
 	private Mouse findMouseWithId(int id)
@@ -60,5 +47,16 @@ public class MouseMoveEventHandler implements EventHandler<MouseMoveEvent>
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public Class<MouseMoveEvent> getEventClass()
+	{
+		return MouseMoveEvent.class;
+	}
+
+	public void setMouseList(List<Mouse> mouseList)
+	{
+		this.mouseList = mouseList;
 	}
 }

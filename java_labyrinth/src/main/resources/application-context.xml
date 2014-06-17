@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:util="http://www.springframework.org/schema/util"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 	   					   http://www.springframework.org/schema/beans/spring-beans.xsd
 	   					   http://www.springframework.org/schema/context
@@ -12,13 +10,10 @@
 	<context:annotation-config />
 	<context:component-scan base-package="at.tuwien.foop.labyrinth" />
 
-	<util:list id="doorList" value-type="at.tuwien.foop.labyrinth.model.Door"
-		list-class="java.util.ArrayList" />
-	<util:list id="mouseList" value-type="at.tuwien.foop.labyrinth.model.Mouse"
-		list-class="java.util.ArrayList" />
+	<util:list id="doorList" value-type="at.tuwien.foop.labyrinth.model.Door" list-class="java.util.ArrayList" />
+	<util:list id="mouseList" value-type="at.tuwien.foop.labyrinth.model.Mouse" list-class="java.util.ArrayList" />
 
-	<util:list id="eventHandlerList" value-type="at.tuwien.foop.labyrinth.event.EventHandler"
-		list-class="java.util.ArrayList">
+	<util:list id="eventHandlerList" value-type="at.tuwien.foop.labyrinth.event.EventHandler" list-class="java.util.ArrayList">
 		<ref bean="doorClickedEventHandler" />
 		<ref bean="mouseMoveEventHandler" />
 		<ref bean="gameEventHandler" />
@@ -30,6 +25,5 @@
 		</constructor-arg>
 	</bean>
 
-	<bean id="networkEventHandlerStub" class="at.tuwien.foop.labyrinth.network.NetworkEventHandler"
-		factory-bean="networkEventHandlerImpl" factory-method="export" />
+	<bean id="networkEventHandlerStub" class="at.tuwien.foop.labyrinth.network.NetworkEventHandler" factory-bean="networkEventHandlerImpl" factory-method="export" />
 </beans>

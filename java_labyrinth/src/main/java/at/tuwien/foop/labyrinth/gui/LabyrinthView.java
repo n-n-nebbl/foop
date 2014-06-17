@@ -24,6 +24,34 @@ import at.tuwien.foop.labyrinth.model.Mouse;
 public class LabyrinthView extends Observable
 {
 
+	private class DialogRunnable implements Runnable
+	{
+		private Mouse wonMouse;
+
+		public DialogRunnable(Mouse wonMouse)
+		{
+			this.wonMouse = wonMouse;
+		}
+
+		@Override
+		public void run()
+		{
+			JOptionPane.showMessageDialog(null, "Game ended, player <" + wonMouse.getColor() + "> won!", "Game ended", JOptionPane.PLAIN_MESSAGE);
+		}
+	}
+
+	private class ExitWindowAdapter extends WindowAdapter
+	{
+		// Close the labyrinth and exit
+		@Override
+		public void windowClosing(WindowEvent e)
+		{
+
+			StartLabyrinth.onExit();
+			System.exit(0);
+		}
+	}
+
 	private int clickedButtonID;
 
 	@Resource(name = "doorList")
@@ -44,18 +72,19 @@ public class LabyrinthView extends Observable
 		waitForGameStart();
 	}
 
-	public void setTitel(String text)
-	{
-		if(f != null)
-		{
-			if(text.isEmpty()) f.setTitle("Mouse Labyrinth");
-			else f.setTitle("Mouse Labyrinth - " + text);
-		}
-	}
-
 	public int getClickedButtonID()
 	{
 		return this.clickedButtonID;
+	}
+
+	public Map getStartLabyrinth()
+	{
+		return this.labyrinth;
+	}
+
+	public void repaintAll()
+	{
+		labyrinthComponent.repaint();
 	}
 
 	public void setClickedButtonID(int clickedButtonID)
@@ -65,14 +94,40 @@ public class LabyrinthView extends Observable
 		notifyObservers();
 	}
 
-	public void repaintAll()
+	public void setGameRunning(Map labyrinth)
 	{
-		labyrinthComponent.repaint();
+		if(f != null)
+		{
+			f.setVisible(false);
+		}
+
+		this.labyrinth = labyrinth;
+		f = new JFrame();
+		f.add(labyrinthComponent);
+		f.setSize(20 * labyrinth.getWidth(), 20 * labyrinth.getHeight() + 20);
+		f.setResizable(false);
+		f.setLocationRelativeTo(null);
+		f.setVisible(true);
+		f.setLayout(null);
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		f.addWindowListener(new ExitWindowAdapter());
+		this.setTitel("");
 	}
 
-	public Map getStartLabyrinth()
+	public void setTitel(String text)
 	{
-		return this.labyrinth;
+		if(f != null)
+		{
+			if(text.isEmpty())
+			{
+				f.setTitle("Mouse Labyrinth");
+			}
+			else
+			{
+				f.setTitle("Mouse Labyrinth - " + text);
+			}
+		}
 	}
 
 	public void waitForGameStart()
@@ -83,7 +138,10 @@ public class LabyrinthView extends Observable
 	public void waitForGameStart(int wonID)
 	{
 
-		if(f != null) f.setVisible(false);
+		if(f != null)
+		{
+			f.setVisible(false);
+		}
 
 		if(wonID != -1 && f != null)
 		{
@@ -111,7 +169,7 @@ public class LabyrinthView extends Observable
 		JButton startButton = new JButton("Start game!");
 		startButton.setBounds(5, 5, 290, 50);
 
-		// Todo: MVC Concept?
+		// TODO: MVC Concept?
 		startButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -123,7 +181,10 @@ public class LabyrinthView extends Observable
 					{
 						System.out.println("LabyrinthView(): Error, game already running.");
 					}
-					else StartLabyrinth.getLabyrinthServer().startGame();
+					else
+					{
+						StartLabyrinth.getLabyrinthServer().startGame();
+					}
 				}
 				catch(RemoteException e1)
 				{
@@ -134,52 +195,6 @@ public class LabyrinthView extends Observable
 		});
 
 		f.add(startButton);
-	}
-
-	public void setGameRunning(Map labyrinth)
-	{
-		if(f != null) f.setVisible(false);
-
-		this.labyrinth = labyrinth;
-		f = new JFrame();
-		f.add(labyrinthComponent);
-		f.setSize(20 * labyrinth.getWidth(), 20 * labyrinth.getHeight() + 20);
-		f.setResizable(false);
-		f.setLocationRelativeTo(null);
-		f.setVisible(true);
-		f.setLayout(null);
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		f.addWindowListener(new ExitWindowAdapter());
-		this.setTitel("");
-	}
-
-	private class ExitWindowAdapter extends WindowAdapter
-	{
-		// Close the labyrinth and exit
-		@Override
-		public void windowClosing(WindowEvent e)
-		{
-
-			StartLabyrinth.onExit();
-			System.exit(0);
-		}
-	}
-
-	private class DialogRunnable implements Runnable
-	{
-		private Mouse wonMouse;
-
-		public DialogRunnable(Mouse wonMouse)
-		{
-			this.wonMouse = wonMouse;
-		}
-
-		@Override
-		public void run()
-		{
-			JOptionPane.showMessageDialog(null, "Game ended, player <" + wonMouse.getColor() + "> won!", "Game ended", JOptionPane.PLAIN_MESSAGE);
-		}
 	}
 
 }

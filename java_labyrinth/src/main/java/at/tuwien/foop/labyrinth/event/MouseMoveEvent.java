@@ -1,25 +1,22 @@
 package at.tuwien.foop.labyrinth.event;
 
 import at.tuwien.foop.labyrinth.model.Mouse;
+import at.tuwien.foop.labyrinth.model.MouseState;
 
 public class MouseMoveEvent implements Event
 {
+	private static final long serialVersionUID = 6999511844096197163L;
 
 	private int mouseID;
 
-	private int old_x;
-	private int old_y;
-	private int old_direction;
+	private MouseState oldState;
+	private MouseState newState;
 
-	private int new_x;
-	private int new_y;
-	private int new_direction;
-
-	public MouseMoveEvent()
+	public MouseMoveEvent(Mouse mouse)
 	{
-		this.old_x = 0;
-		this.old_y = 0;
-		this.old_direction = Mouse.DIRECTION_RIGHT;
+		this.mouseID = mouse.getId();
+		this.oldState = mouse.getOldState();
+		this.newState = mouse.getState();
 	}
 
 	public int getMouseID()
@@ -27,68 +24,35 @@ public class MouseMoveEvent implements Event
 		return mouseID;
 	}
 
+	public MouseState getNewState()
+	{
+		return newState;
+	}
+
+	public MouseState getOldState()
+	{
+		return oldState;
+	}
+
 	public void setMouseID(int mouseID)
 	{
 		this.mouseID = mouseID;
 	}
 
-	public int getOld_x()
+	public void setNewState(MouseState newState)
 	{
-		return old_x;
+		this.newState = newState;
 	}
 
-	public void setOld_x(int old_x)
+	public void setOldState(MouseState oldState)
 	{
-		this.old_x = old_x;
+		this.oldState = oldState;
 	}
 
-	public int getOld_y()
+	@Override
+	public String toString()
 	{
-		return old_y;
+		return oldState.toString() + newState.toString();
 	}
 
-	public void setOld_y(int old_y)
-	{
-		this.old_y = old_y;
-	}
-
-	public int getOld_direction()
-	{
-		return old_direction;
-	}
-
-	public void setOld_direction(int old_direction)
-	{
-		this.old_direction = old_direction;
-	}
-
-	public int getNew_x()
-	{
-		return new_x;
-	}
-
-	public void setNew_x(int new_x)
-	{
-		this.new_x = new_x;
-	}
-
-	public int getNew_y()
-	{
-		return new_y;
-	}
-
-	public void setNew_y(int new_y)
-	{
-		this.new_y = new_y;
-	}
-
-	public int getNew_direction()
-	{
-		return new_direction;
-	}
-
-	public void setNew_direction(int new_direction)
-	{
-		this.new_direction = new_direction;
-	}
 }

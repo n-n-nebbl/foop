@@ -3,19 +3,6 @@ package at.tuwien.foop.labyrinth.model;
 public class Mouse extends Entity
 {
 
-	private static final long serialVersionUID = -4624485550774716174L;
-	public static final int DIRECTION_UP = 0;
-	public static final int DIRECTION_RIGHT = 1;
-	public static final int DIRECTION_DOWN = 2;
-	public static final int DIRECTION_LEFT = 3;
-	private static int lastColor = 1;
-
-	private int id;
-	private int mouseDirection;
-	private int x;
-	private int y;
-	private MouseColor mouseColor;
-
 	public enum MouseColor
 	{
 		RED(2),
@@ -38,57 +25,55 @@ public class Mouse extends Entity
 		}
 	}
 
+	public enum MouseDirection
+	{
+		UP(0),
+		RIGHT(1),
+		DOWN(2),
+		LEFT(3);
+
+		@SuppressWarnings("unused")
+		private int code;
+
+		private MouseDirection(int c)
+		{
+			this.code = c;
+		}
+
+		public MouseDirection getNext()
+		{
+			switch(this)
+			{
+				case UP:
+					return RIGHT;
+				case RIGHT:
+					return DOWN;
+				case DOWN:
+					return LEFT;
+				case LEFT:
+					return UP;
+
+			}
+			return UP;
+		}
+
+	}
+
+	private static final long serialVersionUID = -4624485550774716174L;
+	private static int lastColor = 1;
+	private int id;
+	private MouseState state;
+	private MouseState oldState;
+	private MouseColor mouseColor;
+
 	public Mouse(int x, int y)
 	{
 		super('>');
 
-		lastColor = (lastColor + 1) % (MouseColor.maxColor); // Todo: fix order
+		lastColor = (lastColor + 1) % (MouseColor.maxColor); // TODO: fix order
 		this.mouseColor = MouseColor.values()[lastColor];
 		this.id = SequenceGenerator.getNextId("Mouse");
-		this.x = x;
-		this.y = y;
-		this.mouseDirection = DIRECTION_RIGHT;
-	}
-
-	public int getId()
-	{
-		return id;
-	}
-
-	public void setId(int id)
-	{
-		this.id = id;
-	}
-
-	public int getMouseDirection()
-	{
-		return mouseDirection;
-	}
-
-	public void setMouseDirection(int mouseDirection)
-	{
-		this.mouseDirection = mouseDirection;
-		refreshCharacter();
-	}
-
-	public int getX()
-	{
-		return x;
-	}
-
-	public void setX(int x)
-	{
-		this.x = x;
-	}
-
-	public int getY()
-	{
-		return y;
-	}
-
-	public void setY(int y)
-	{
-		this.y = y;
+		this.state = new MouseState(x, y, MouseDirection.RIGHT);
 	}
 
 	public MouseColor getColor()
@@ -96,22 +81,73 @@ public class Mouse extends Entity
 		return this.mouseColor;
 	}
 
+	public int getId()
+	{
+		return id;
+	}
+
+	public MouseColor getMouseColor()
+	{
+		return mouseColor;
+	}
+
+	public MouseState getOldState()
+	{
+		return oldState;
+	}
+
+	public MouseState getState()
+	{
+		return state;
+	}
+
+	public int getX()
+	{
+		return state.getX();
+	}
+
+	public int getY()
+	{
+		return state.getY();
+	}
+
 	private void refreshCharacter()
 	{
-		switch(mouseDirection)
+		switch(state.getDirection())
 		{
-			case DIRECTION_UP:
+			case UP:
 				setCharacter('^');
 				break;
-			case DIRECTION_RIGHT:
+			case RIGHT:
 				setCharacter('>');
 				break;
-			case DIRECTION_DOWN:
+			case DOWN:
 				setCharacter('v');
 				break;
-			case DIRECTION_LEFT:
+			case LEFT:
 				setCharacter('<');
 				break;
 		}
 	}
+
+	public void setId(int id)
+	{
+		this.id = id;
+	}
+
+	public void setMouseColor(MouseColor mouseColor)
+	{
+		this.mouseColor = mouseColor;
+	}
+
+	public void setOldState(MouseState oldState)
+	{
+		this.oldState = oldState;
+	}
+
+	public void setState(MouseState state)
+	{
+		this.state = state;
+	}
+
 }

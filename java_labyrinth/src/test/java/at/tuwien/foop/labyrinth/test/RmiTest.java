@@ -1,6 +1,10 @@
 package at.tuwien.foop.labyrinth.test;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.rmi.RemoteException;
 
@@ -12,15 +16,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import at.tuwien.foop.labyrinth.event.DoorClickedEvent;
 import at.tuwien.foop.labyrinth.event.DoorClickedEventHandler;
 import at.tuwien.foop.labyrinth.event.EventBus;
-import at.tuwien.foop.labyrinth.event.MouseMoveEvent;
-import at.tuwien.foop.labyrinth.event.MouseMoveEventHandler;
 import at.tuwien.foop.labyrinth.network.LabyrinthServer;
 import at.tuwien.foop.labyrinth.network.LabyrinthServerImpl;
 import at.tuwien.foop.labyrinth.network.NetworkEventHandler;
 import at.tuwien.foop.labyrinth.network.RmiService;
 
-public class RmiTest {
-
+public class RmiTest
+{
 	ClassPathXmlApplicationContext ctx;
 
 	LabyrinthServerImpl server;
@@ -48,6 +50,29 @@ public class RmiTest {
 	}
 
 	@Test
+	public void testRemoveFromServer() throws RemoteException {
+		// Client side
+		DoorClickedEvent event = new DoorClickedEvent(0, 0);
+		DoorClickedEventHandler doorHandler = mock(DoorClickedEventHandler.class);
+		when(doorHandler.getEventClass()).thenReturn(DoorClickedEvent.class);
+
+		localEventBus.addEventHandler(doorHandler);
+
+		// send remote object reference to server-side
+		stub = (NetworkEventHandler)ctx.getBean("networkEventHandlerStub");
+		remote.addNetworkEventHandler(stub);
+		remote.removeNetworkEventHandler(stub);
+
+		// server side (fire event)
+		server.raiseDoorEvent(event);
+
+		// check if event is fired on right object on client side
+		// any(MouseMoveEvent.class) used, because the event gets serialized and
+		// sent over the network --> not equals event created here
+		verify(doorHandler, times(0)).eventFired(any(DoorClickedEvent.class));
+	}
+
+	@Test
 	public void testRmi() throws RemoteException {
 		// Client side
 		DoorClickedEvent event = new DoorClickedEvent(0, 0);
@@ -56,7 +81,7 @@ public class RmiTest {
 
 		localEventBus.addEventHandler(doorHandler);
 		// send remote object reference to server-side
-		stub = (NetworkEventHandler) ctx.getBean("networkEventHandlerStub");
+		stub = (NetworkEventHandler)ctx.getBean("networkEventHandlerStub");
 		remote.addNetworkEventHandler(stub);
 
 		// server side (fire event)
@@ -66,29 +91,5 @@ public class RmiTest {
 		// any(MouseMoveEvent.class) used, because the event gets serialized and
 		// sent over the network --> not equals event created here
 		verify(doorHandler).eventFired(any(DoorClickedEvent.class));
-	}
-
-	@Test
-	public void testRemoveFromServer() throws RemoteException {
-		// Client side
-		DoorClickedEvent event = new DoorClickedEvent(0, 0);
-		DoorClickedEventHandler doorHandler = mock(DoorClickedEventHandler.class);
-		when(doorHandler.getEventClass()).thenReturn(DoorClickedEvent.class);
-
-		localEventBus.addEventHandler(doorHandler);
-		
-		// send remote object reference to server-side
-		stub = (NetworkEventHandler) ctx.getBean("networkEventHandlerStub");
-		remote.addNetworkEventHandler(stub);
-		remote.removeNetworkEventHandler(stub);
-		
-
-		// server side (fire event)
-		server.raiseDoorEvent(event);
-
-		// check if event is fired on right object on client side
-		// any(MouseMoveEvent.class) used, because the event gets serialized and
-		// sent over the network --> not equals event created here
-		verify(doorHandler, times(0)).eventFired(any(DoorClickedEvent.class));
 	}
 }

@@ -3,6 +3,8 @@ package at.tuwien.foop.labyrinth.event;
 public class DoorClickedEvent implements Event
 {
 
+	private static final long serialVersionUID = 1282649223736404934L;
+
 	private int doorId;
 	private int doorStatus;
 
@@ -23,14 +25,14 @@ public class DoorClickedEvent implements Event
 		return doorId;
 	}
 
-	public void setDoorId(int doorId)
-	{
-		this.doorId = doorId;
-	}
-
 	public int getDoorStatus()
 	{
 		return doorStatus;
+	}
+
+	public void setDoorId(int doorId)
+	{
+		this.doorId = doorId;
 	}
 
 	public void setDoorStatus(int doorStatus)

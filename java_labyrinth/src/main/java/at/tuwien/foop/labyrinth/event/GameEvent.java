@@ -9,6 +9,8 @@ public class GameEvent implements Event
 		GAMEENDED
 	}
 
+	private static final long serialVersionUID = -4830989760860134179L;
+
 	private GameEventType type;
 	private String messageText;
 	private int value;
@@ -31,13 +33,13 @@ public class GameEvent implements Event
 		return this.messageText;
 	}
 
-	public int getValue()
-	{
-		return this.value;
-	}
-
 	public GameEventType getType()
 	{
 		return this.type;
+	}
+
+	public int getValue()
+	{
+		return this.value;
 	}
 }

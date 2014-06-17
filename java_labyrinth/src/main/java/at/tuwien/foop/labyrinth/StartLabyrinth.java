@@ -7,13 +7,10 @@ import javax.swing.SwingUtilities;
 
 import org.springframework.beans.BeansException;
 
-import at.tuwien.foop.labyrinth.event.DoorClickedEvent;
 import at.tuwien.foop.labyrinth.event.EventBus;
 import at.tuwien.foop.labyrinth.event.GameEvent;
 import at.tuwien.foop.labyrinth.event.GameEvent.GameEventType;
-import at.tuwien.foop.labyrinth.event.MouseMoveEvent;
 import at.tuwien.foop.labyrinth.gui.LabyrinthController;
-import at.tuwien.foop.labyrinth.model.Door;
 import at.tuwien.foop.labyrinth.network.LabyrinthServer;
 import at.tuwien.foop.labyrinth.network.LabyrinthServerImpl;
 import at.tuwien.foop.labyrinth.network.NetworkEventHandler;
@@ -24,19 +21,18 @@ public class StartLabyrinth
 
 	private static LabyrinthServerImpl server = null;
 	private static LabyrinthServer remote = null;
-	private static EventBus localEventBus = null;
 	private static RmiService rmiService = null;
 	private static NetworkEventHandler networkEventHandlerConnectedToEventBus = null;
 
+	public static LabyrinthServer getLabyrinthServer()
+	{
+		return remote;
+	}
+
 	public static void main(String[] args) throws BeansException, RemoteException
 	{
-
 		EventBus bus = ContextHolder.getContext().getBean(EventBus.class);
 
-		bus.fireEvent(new MouseMoveEvent());
-		bus.fireEvent(new MouseMoveEvent());
-		bus.fireEvent(new DoorClickedEvent(0, Door.DOOR_CLOSED));
-		bus.fireEvent(new MouseMoveEvent());
 		bus.fireEvent(new GameEvent(GameEventType.INFORMATION, "Game initialising..."));
 
 		rmiService = ContextHolder.getContext().getBean(RmiService.class);
@@ -50,7 +46,8 @@ public class StartLabyrinth
 			server = new LabyrinthServerImpl();
 			rmiService.bindLabyrinthServer(server);
 		}
-		catch(java.rmi.server.ExportException e) // If there is already a server -> client mode
+		catch(java.rmi.server.ExportException e) // If there is already a
+													// server -> client mode
 		{
 			System.out.println("Server already running, client mode.");
 			// e.printStackTrace();
@@ -103,11 +100,6 @@ public class StartLabyrinth
 		{
 			System.out.println("Error, adding to the player list: " + r.toString());
 		}
-	}
-
-	public static LabyrinthServer getLabyrinthServer()
-	{
-		return remote;
 	}
 
 	public static void onExit()

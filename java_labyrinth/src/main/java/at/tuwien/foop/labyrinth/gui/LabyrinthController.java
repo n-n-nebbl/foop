@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import at.tuwien.foop.labyrinth.StartLabyrinth;
 import at.tuwien.foop.labyrinth.event.DoorClickedEvent;
-import at.tuwien.foop.labyrinth.event.EventBus;
 import at.tuwien.foop.labyrinth.event.GameEvent;
 import at.tuwien.foop.labyrinth.event.MouseMoveEvent;
 import at.tuwien.foop.labyrinth.model.Door;
@@ -21,10 +20,6 @@ import at.tuwien.foop.labyrinth.model.Mouse;
 @Component
 public class LabyrinthController implements Observer
 {
-
-	@Resource
-	private EventBus bus;
-
 	@Resource(name = "doorList")
 	private List<Door> doors;
 
@@ -43,12 +38,6 @@ public class LabyrinthController implements Observer
 
 	// Got a door event from the bus(from the server) -> repaint
 	public void gotDoorEvent(DoorClickedEvent event, Door d)
-	{
-		watched.repaintAll();
-	}
-
-	// Got a mouse event from the bus(from the server) -> repaint
-	public void gotMouseEvent(MouseMoveEvent event, Mouse m)
 	{
 		watched.repaintAll();
 	}
@@ -74,7 +63,6 @@ public class LabyrinthController implements Observer
 				}
 				catch(RemoteException e)
 				{
-
 					System.out.println("gotGameEvent(): Error, getting the map.");
 					e.printStackTrace();
 					return;
@@ -82,17 +70,24 @@ public class LabyrinthController implements Observer
 
 				doors.clear();
 				for(Door d : map.getDoorList())
+				{
 					doors.add(d);
+				}
 
 				mouseList.clear();
 				for(Mouse m : map.getMouseList())
+				{
 					mouseList.add(m);
+				}
 
 				watched.setGameRunning(map);
 
 				for(Mouse m : mouseList)
 				{
-					if(m.getId() == event.getValue()) this.ownMouse = m;
+					if(m.getId() == event.getValue())
+					{
+						this.ownMouse = m;
+					}
 				}
 
 				if(ownMouse != null)
@@ -100,10 +95,19 @@ public class LabyrinthController implements Observer
 					watched.setTitel(ownMouse.getColor().toString());
 					System.out.println("Game event: " + event.getMessageText());
 				}
-				else System.out.println("gotGameEvent(): Error, setting mouse at the beginning.");
+				else
+				{
+					System.out.println("gotGameEvent(): Error, setting mouse at the beginning.");
+				}
 
 				break;
 		}
+	}
+
+	// Got a mouse event from the bus(from the server) -> repaint
+	public void gotMouseEvent(MouseMoveEvent event, Mouse m)
+	{
+		watched.repaintAll();
 	}
 
 	// Someone clicked on the door -> send to the server
@@ -122,10 +126,16 @@ public class LabyrinthController implements Observer
 
 			for(Door door : this.doors)
 			{
-				if(door.getId() == watched.getClickedButtonID()) d = door;
+				if(door.getId() == watched.getClickedButtonID())
+				{
+					d = door;
+				}
 			}
 
-			if(d == null) return;
+			if(d == null)
+			{
+				return;
+			}
 
 			StartLabyrinth.getLabyrinthServer().raiseDoorEvent(new DoorClickedEvent(watched.getClickedButtonID(), (d.getDoorStatus() == Door.DOOR_CLOSED) ? Door.DOOR_OPEN : Door.DOOR_CLOSED));
 		}

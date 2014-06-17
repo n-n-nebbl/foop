@@ -12,19 +12,18 @@ import javax.annotation.Resource;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
 import org.springframework.stereotype.Component;
 
 import at.tuwien.foop.labyrinth.model.Door;
-import at.tuwien.foop.labyrinth.model.Goal;
 import at.tuwien.foop.labyrinth.model.Map;
 import at.tuwien.foop.labyrinth.model.Mouse;
 import at.tuwien.foop.labyrinth.model.Mouse.MouseColor;
-import at.tuwien.foop.labyrinth.model.Path;
-import at.tuwien.foop.labyrinth.model.Wall;
 
 @Component
 public class LabyrinthComponent extends JPanel implements ActionListener
 {
+	private static final long serialVersionUID = -1835312158158985251L;
 
 	@Resource
 	private LabyrinthView labyrinthView;
@@ -47,6 +46,40 @@ public class LabyrinthComponent extends JPanel implements ActionListener
 	}
 
 	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		repaint();
+	}
+
+	public Image createMouseImage(MouseColor m)
+	{
+		ImageIcon i;
+
+		switch(m)
+		{
+			case RED:
+				i = new ImageIcon("./images/player_red.png");
+				break;
+			case GREEN:
+				i = new ImageIcon("./images/player_green.png");
+				break;
+			case BLUE:
+				i = new ImageIcon("./images/player_blue.png");
+				break;
+			case ORANGE:
+				i = new ImageIcon("./images/player_orange.png");
+				break;
+			case BROWN:
+				i = new ImageIcon("./images/player_brown.png");
+				break;
+			default:
+				System.out.println("createMouseImage(): Error, color not found!");
+				return null;
+		}
+		return i.getImage();
+	}
+
+	@Override
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -59,17 +92,17 @@ public class LabyrinthComponent extends JPanel implements ActionListener
 		{
 			for(int x = 0; x < map.getWidth(); x++)
 			{
-				if(map.getField(x, y).getClass() == Wall.class)
+				if(map.getField(x, y).isWall())
 				{
 					g.setColor(Color.black);
 					g.fillRect(x * 20, y * 20, 20, 20);
 				}
-				else if(map.getField(x, y).getClass() == Path.class)
+				else if(map.getField(x, y).isPath())
 				{
 					g.setColor(Color.white);
 					g.fillRect(x * 20, y * 20, 20, 20);
 				}
-				else if(map.getField(x, y).getClass() == Goal.class)
+				else if(map.getField(x, y).isGoal())
 				{
 					g.setColor(Color.yellow);
 					g.fillRect(x * 20, y * 20, 20, 20);
@@ -81,7 +114,10 @@ public class LabyrinthComponent extends JPanel implements ActionListener
 
 					for(Door door : this.doorList)
 					{
-						if(door.getId() == doorID) d = door;
+						if(door.getId() == doorID)
+						{
+							d = door;
+						}
 					}
 
 					if(d == null)
@@ -118,8 +154,14 @@ public class LabyrinthComponent extends JPanel implements ActionListener
 
 					}
 
-					if(d.getDoorStatus() == Door.DOOR_OPEN) doorElementsList.get(d.getId()).setIcon(openedDoorImg);
-					else doorElementsList.get(d.getId()).setIcon(closedDoorImg);
+					if(d.getDoorStatus() == Door.DOOR_OPEN)
+					{
+						doorElementsList.get(d.getId()).setIcon(openedDoorImg);
+					}
+					else
+					{
+						doorElementsList.get(d.getId()).setIcon(closedDoorImg);
+					}
 
 				}
 			}
@@ -127,42 +169,10 @@ public class LabyrinthComponent extends JPanel implements ActionListener
 
 		// From the game data, not the initial map
 		for(Mouse m : mouseList)
+		{
 			g.drawImage(this.createMouseImage(m.getColor()), m.getX() * 20, m.getY() * 20, 20, 20, null);
+		}
 
 		this.setLayout(null);
-	}
-
-	public Image createMouseImage(MouseColor m)
-	{
-		ImageIcon i;
-
-		switch(m)
-		{
-			case RED:
-				i = new ImageIcon("./images/player_red.png");
-				break;
-			case GREEN:
-				i = new ImageIcon("./images/player_green.png");
-				break;
-			case BLUE:
-				i = new ImageIcon("./images/player_blue.png");
-				break;
-			case ORANGE:
-				i = new ImageIcon("./images/player_orange.png");
-				break;
-			case BROWN:
-				i = new ImageIcon("./images/player_brown.png");
-				break;
-			default:
-				System.out.println("createMouseImage(): Error, color not found!");
-				return null;
-		}
-		return i.getImage();
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e)
-	{
-		repaint();
 	}
 }

@@ -21,12 +21,6 @@ public class NetworkEventHandlerImpl implements NetworkEventHandler
 	public NetworkEventHandlerImpl()
 	{}
 
-	@Override
-	public void fireEvent(Event event) throws RemoteException
-	{
-		eventBus.fireEvent(event);
-	}
-
 	/**
 	 * Is used by spring and should not be called manually
 	 * 
@@ -36,6 +30,12 @@ public class NetworkEventHandlerImpl implements NetworkEventHandler
 	public NetworkEventHandler export() throws RemoteException
 	{
 		return (NetworkEventHandler)UnicastRemoteObject.exportObject(this, 0);
+	}
+
+	@Override
+	public void fireEvent(Event event) throws RemoteException
+	{
+		eventBus.fireEvent(event);
 	}
 
 	/**

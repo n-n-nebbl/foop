@@ -30,6 +30,78 @@ public class Map implements Serializable
 		this.loadLabyrinth();
 	}
 
+	public Mouse addMouse()
+	{
+		Random randomGenerator = new Random();
+
+		// Place the mouses somewhere -> random till we get a P. There is a P(logic in loadLabyrinth)
+		while(true)
+		{
+			int y = randomGenerator.nextInt(this.field.size());
+			ArrayList<Entity> currentLine = field.get(y);
+			int x = randomGenerator.nextInt(currentLine.size());
+			Entity e = currentLine.get(x);
+
+			if(e.isPath())
+			{
+				Mouse m = new Mouse(x, y);
+				this.mouseList.add(m);
+				return m;
+			}
+		}
+	}
+
+	public Door getDoorByID(int id)
+	{
+		for(Door d : doorList)
+		{
+			if(d.getId() == id)
+			{
+				return d;
+			}
+		}
+
+		return null;
+	}
+
+	public ArrayList<Door> getDoorList()
+	{
+		return this.doorList;
+	}
+
+	public Entity getField(int x, int y)
+	{
+		return field.get(y).get(x);
+	}
+
+	public int getHeight()
+	{
+		return this.height;
+	}
+
+	public Mouse getMouseByID(int id)
+	{
+		for(Mouse m : mouseList)
+		{
+			if(m.getId() == id)
+			{
+				return m;
+			}
+		}
+
+		return null;
+	}
+
+	public ArrayList<Mouse> getMouseList()
+	{
+		return this.mouseList;
+	}
+
+	public int getWidth()
+	{
+		return this.width;
+	}
+
 	public void loadLabyrinth()
 	{
 
@@ -124,77 +196,5 @@ public class Map implements Serializable
 			System.exit(0);
 			return;
 		}
-	}
-
-	public Mouse addMouse()
-	{
-		Random randomGenerator = new Random();
-
-		// Place the mouses somewhere -> random till we get a P. There is a P(logic in loadLabyrinth)
-		while(true)
-		{
-			int y = randomGenerator.nextInt(this.field.size());
-			ArrayList<Entity> currentLine = field.get(y);
-			int x = randomGenerator.nextInt(currentLine.size());
-			Entity e = currentLine.get(x);
-
-			if(e.getClass() == Path.class)
-			{
-				Mouse m = new Mouse(x, y);
-				this.mouseList.add(m);
-				return m;
-			}
-		}
-	}
-
-	public Entity getField(int x, int y)
-	{
-		return field.get(y).get(x);
-	}
-
-	public Mouse getMouseByID(int id)
-	{
-		for(Mouse m : mouseList)
-		{
-			if(m.getId() == id)
-			{
-				return m;
-			}
-		}
-
-		return null;
-	}
-
-	public Door getDoorByID(int id)
-	{
-		for(Door d : doorList)
-		{
-			if(d.getId() == id)
-			{
-				return d;
-			}
-		}
-
-		return null;
-	}
-
-	public ArrayList<Door> getDoorList()
-	{
-		return this.doorList;
-	}
-
-	public ArrayList<Mouse> getMouseList()
-	{
-		return this.mouseList;
-	}
-
-	public int getWidth()
-	{
-		return this.width;
-	}
-
-	public int getHeight()
-	{
-		return this.height;
 	}
 }

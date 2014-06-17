@@ -13,10 +13,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class RmiService
 {
-
 	private final String bindingName = "labyrinthServer";
 	private LabyrinthServer boundServer;
 	private Registry registry;
+
+	public void bindLabyrinthServer(LabyrinthServer server) throws RemoteException
+	{
+		LabyrinthServer stub = (LabyrinthServer)UnicastRemoteObject.exportObject(server, 0);
+		registry.rebind(bindingName, stub);
+		boundServer = server;
+	}
 
 	public LabyrinthServer getLabyrinthServer(String host) throws RemoteException
 	{
@@ -37,13 +43,6 @@ public class RmiService
 	{
 		registry = LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
 		return (registry != null);
-	}
-
-	public void bindLabyrinthServer(LabyrinthServer server) throws RemoteException
-	{
-		LabyrinthServer stub = (LabyrinthServer)UnicastRemoteObject.exportObject(server, 0);
-		registry.rebind(bindingName, stub);
-		boundServer = server;
 	}
 
 	@PreDestroy

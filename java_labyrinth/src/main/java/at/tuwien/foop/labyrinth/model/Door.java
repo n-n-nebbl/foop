@@ -29,9 +29,9 @@ public class Door extends Entity
 		this.lastTimeChanged = 0;
 	}
 
-	public int getId()
+	public int getDoorDirection()
 	{
-		return id;
+		return doorDirection;
 	}
 
 	public int getDoorStatus()
@@ -39,31 +39,9 @@ public class Door extends Entity
 		return doorStatus;
 	}
 
-	public void setDoorStatus(int doorStatus)
+	public int getId()
 	{
-		this.doorStatus = doorStatus;
-		refreshCharacter();
-	}
-
-	public int getDoorDirection()
-	{
-		return doorDirection;
-	}
-
-	public void setDoorDirection(int doorDirection)
-	{
-		this.doorDirection = doorDirection;
-		refreshCharacter();
-	}
-
-	public long getLastTimeChanged()
-	{
-		return lastTimeChanged;
-	}
-
-	public void setLastTimeChanged(long lastTimeChanged)
-	{
-		this.lastTimeChanged = lastTimeChanged;
+		return id;
 	}
 
 	public Image getImg()
@@ -71,22 +49,14 @@ public class Door extends Entity
 		return img;
 	}
 
-	/**
-	 * @return the time between now and the last change to the door
-	 */
-	public long timeSinceLastChange()
+	public long getLastTimeChanged()
 	{
-		return new Date().getTime() - lastTimeChanged;
+		return lastTimeChanged;
 	}
 
-	/**
-	 * @param duration
-	 *            duration in ms
-	 * @return true if duration is greater than or equals the time the last change to the door has happend
-	 */
-	public boolean timeSinceLastChangeGE(long duration)
+	public boolean isOpen()
 	{
-		return timeSinceLastChange() >= duration;
+		return doorStatus == DOOR_OPEN;
 	}
 
 	private void refreshCharacter()
@@ -106,5 +76,40 @@ public class Door extends Entity
 				setCharacter('|');
 			}
 		}
+	}
+
+	public void setDoorDirection(int doorDirection)
+	{
+		this.doorDirection = doorDirection;
+		refreshCharacter();
+	}
+
+	public void setDoorStatus(int doorStatus)
+	{
+		this.doorStatus = doorStatus;
+		refreshCharacter();
+	}
+
+	public void setLastTimeChanged(long lastTimeChanged)
+	{
+		this.lastTimeChanged = lastTimeChanged;
+	}
+
+	/**
+	 * @return the time between now and the last change to the door
+	 */
+	public long timeSinceLastChange()
+	{
+		return new Date().getTime() - lastTimeChanged;
+	}
+
+	/**
+	 * @param duration
+	 *            duration in ms
+	 * @return true if duration is greater than or equals the time the last change to the door has happend
+	 */
+	public boolean timeSinceLastChangeGE(long duration)
+	{
+		return timeSinceLastChange() >= duration;
 	}
 }

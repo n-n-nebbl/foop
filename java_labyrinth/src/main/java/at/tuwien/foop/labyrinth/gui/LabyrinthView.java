@@ -46,12 +46,10 @@ public class LabyrinthView extends Observable
 
 	public void setTitel(String text)
 	{
-		if (f != null)
+		if(f != null)
 		{
-			if (text.isEmpty())
-				f.setTitle("Mouse Labyrinth");
-			else
-				f.setTitle("Mouse Labyrinth - " + text);
+			if(text.isEmpty()) f.setTitle("Mouse Labyrinth");
+			else f.setTitle("Mouse Labyrinth - " + text);
 		}
 	}
 
@@ -85,14 +83,13 @@ public class LabyrinthView extends Observable
 	public void waitForGameStart(int wonID)
 	{
 
-		if (f != null)
-			f.setVisible(false);
+		if(f != null) f.setVisible(false);
 
-		if (wonID != -1 && f != null)
+		if(wonID != -1 && f != null)
 		{
-			for (Mouse m : mouseList)
+			for(Mouse m : mouseList)
 			{
-				if (m.getId() == wonID)
+				if(m.getId() == wonID)
 				{
 					(new Thread(new DialogRunnable(m))).start();
 				}
@@ -121,16 +118,15 @@ public class LabyrinthView extends Observable
 			{
 				try
 				{
-					if (StartLabyrinth.getLabyrinthServer().gameIsRunning())
+					if(StartLabyrinth.getLabyrinthServer().gameIsRunning())
 					{
-						System.out
-								.println("LabyrinthView(): Error, game already running.");
-					} else
-						StartLabyrinth.getLabyrinthServer().startGame();
-				} catch (RemoteException e1)
+						System.out.println("LabyrinthView(): Error, game already running.");
+					}
+					else StartLabyrinth.getLabyrinthServer().startGame();
+				}
+				catch(RemoteException e1)
 				{
-					System.out
-							.println("LabyrinthView(): Error, distributing event.");
+					System.out.println("LabyrinthView(): Error, distributing event.");
 					e1.printStackTrace();
 				}
 			}
@@ -141,8 +137,7 @@ public class LabyrinthView extends Observable
 
 	public void setGameRunning(Map labyrinth)
 	{
-		if (f != null)
-			f.setVisible(false);
+		if(f != null) f.setVisible(false);
 
 		this.labyrinth = labyrinth;
 		f = new JFrame();
@@ -180,9 +175,7 @@ public class LabyrinthView extends Observable
 
 		public void run()
 		{
-			JOptionPane.showMessageDialog(null, "Game ended, player <"
-					+ wonMouse.getColor() + "> won!", "Game ended",
-					JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Game ended, player <" + wonMouse.getColor() + "> won!", "Game ended", JOptionPane.PLAIN_MESSAGE);
 		}
 	}
 

@@ -7,29 +7,34 @@ import at.tuwien.foop.labyrinth.event.DoorClickedEvent;
 import at.tuwien.foop.labyrinth.event.Event;
 import at.tuwien.foop.labyrinth.model.Map;
 
-public interface LabyrinthServer extends Remote {
+public interface LabyrinthServer extends Remote
+{
 
 	/**
 	 * Adds an remote Object to the labyrinth server
-	 * @param handler Has to be an already exported Remote-Stub!!! (handler.export())
+	 * 
+	 * @param handler
+	 *            Has to be an already exported Remote-Stub!!! (handler.export())
 	 * @throws RemoteException
 	 */
 	public void addNetworkEventHandler(NetworkEventHandler handler) throws RemoteException;
-	
+
 	/**
 	 * 
-	 * @param handler 
+	 * @param handler
 	 * @throws RemoteException
 	 */
 	public void removeNetworkEventHandler(NetworkEventHandler handler) throws RemoteException;
-	
+
 	/**
 	 * Fires given Event on all registered NetworkEventHandlers
-	 * @param e event being fired
+	 * 
+	 * @param e
+	 *            event being fired
 	 * @throws RemoteException
 	 */
 	public void raiseDoorEvent(DoorClickedEvent e) throws RemoteException;
-	
+
 	/**
 	 * @return the labyrinth generated on the server
 	 * @throws RemoteException

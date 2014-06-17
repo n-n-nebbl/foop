@@ -13,16 +13,18 @@ import at.tuwien.foop.labyrinth.event.EventBus;
 import at.tuwien.foop.labyrinth.model.Mouse;
 
 @Component
-public class NetworkEventHandlerImpl implements NetworkEventHandler {
+public class NetworkEventHandlerImpl implements NetworkEventHandler
+{
 
 	@Autowired
 	private EventBus eventBus;
-	
-	public NetworkEventHandlerImpl() {
-	}
+
+	public NetworkEventHandlerImpl()
+	{}
 
 	@Override
-	public void fireEvent(Event event) throws RemoteException {
+	public void fireEvent(Event event) throws RemoteException
+	{
 		eventBus.fireEvent(event);
 	}
 
@@ -32,18 +34,23 @@ public class NetworkEventHandlerImpl implements NetworkEventHandler {
 	 * @return stub of this object (remote proxy)
 	 * @throws RemoteException
 	 */
-	public NetworkEventHandler export() throws RemoteException {
-		return (NetworkEventHandler) UnicastRemoteObject.exportObject(this, 0);
+	public NetworkEventHandler export() throws RemoteException
+	{
+		return (NetworkEventHandler)UnicastRemoteObject.exportObject(this, 0);
 	}
 
 	/**
 	 * Is called by spring on shutdown and should not be called manually
 	 */
 	@PreDestroy
-	public void unexport() {
-		try {
+	public void unexport()
+	{
+		try
+		{
 			UnicastRemoteObject.unexportObject(this, true);
-		} catch (Exception e) {
+		}
+		catch(Exception e)
+		{
 			System.out.println("unexport(): Error during unexport of NetworkEventHandler");
 		}
 	}

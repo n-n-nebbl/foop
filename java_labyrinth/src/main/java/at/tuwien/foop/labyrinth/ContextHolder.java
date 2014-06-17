@@ -2,16 +2,19 @@ package at.tuwien.foop.labyrinth;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class ContextHolder {
+public class ContextHolder
+{
 
 	private static ClassPathXmlApplicationContext ctx;
-	
-	static {
+
+	static
+	{
 		ctx = new ClassPathXmlApplicationContext("application-context.xml");
 		ctx.registerShutdownHook();
 	}
-	
-	public static ClassPathXmlApplicationContext getContext() {
+
+	public static ClassPathXmlApplicationContext getContext()
+	{
 		return ctx;
 	}
 }

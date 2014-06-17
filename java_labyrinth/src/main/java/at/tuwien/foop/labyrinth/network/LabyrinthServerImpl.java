@@ -32,29 +32,23 @@ public class LabyrinthServerImpl implements LabyrinthServer
 	}
 
 	@Override
-	public void addNetworkEventHandler(NetworkEventHandler handler)
-			throws RemoteException
+	public void addNetworkEventHandler(NetworkEventHandler handler) throws RemoteException
 	{
 
-		if (gameIsRunning())
-			throw new RemoteException("Game is running!");
+		if(gameIsRunning()) throw new RemoteException("Game is running!");
 
-		for (NetworkEventHandler h : handlers)
+		for(NetworkEventHandler h : handlers)
 		{
-			h.fireEvent(new GameEvent(GameEventType.INFORMATION,
-					"Another player joined the game. We are "
-							+ (handlers.size() + 1) + " players now."));
+			h.fireEvent(new GameEvent(GameEventType.INFORMATION, "Another player joined the game. We are " + (handlers.size() + 1) + " players now."));
 		}
 
 		handlers.add(handler);
 	}
 
 	@Override
-	public void removeNetworkEventHandler(NetworkEventHandler handler)
-			throws RemoteException
+	public void removeNetworkEventHandler(NetworkEventHandler handler) throws RemoteException
 	{
-		System.out.println("removeNetworkEventHandler():"
-				+ handlers.remove(handler));
+		System.out.println("removeNetworkEventHandler():" + handlers.remove(handler));
 	}
 
 	@Override
@@ -66,8 +60,7 @@ public class LabyrinthServerImpl implements LabyrinthServer
 	// TODO: wenn das spiel bereits läuft -> ...
 	public void startGame()
 	{
-		if (this.running)
-			return;
+		if(this.running) return;
 
 		this.running = true;
 		timer = new Timer(1000, new GameRoundTimer());
@@ -76,24 +69,19 @@ public class LabyrinthServerImpl implements LabyrinthServer
 		ArrayList<Mouse> mouseList = new ArrayList<Mouse>();
 
 		// Adds all mouses
-		for (int i = 0; i < handlers.size(); i++)
+		for(int i = 0; i < handlers.size(); i++)
 			mouseList.add(labyrinth.addMouse());
 
 		// Sends an event to get the labyrinth
-		for (int i = 0; i < handlers.size(); i++)
+		for(int i = 0; i < handlers.size(); i++)
 		{
 			try
 			{
-				handlers.get(i).fireEvent(
-						new GameEvent(GameEventType.GAMESTARTED,
-								"Game started by a player. You got the "
-										+ mouseList.get(i).getColor()
-												.toString() + " mouse.",
-								mouseList.get(i).getId()));
-			} catch (RemoteException e)
+				handlers.get(i).fireEvent(new GameEvent(GameEventType.GAMESTARTED, "Game started by a player. You got the " + mouseList.get(i).getColor().toString() + " mouse.", mouseList.get(i).getId()));
+			}
+			catch(RemoteException e)
 			{
-				System.out.println("startGame(): Error sending events, "
-						+ e.toString());
+				System.out.println("startGame(): Error sending events, " + e.toString());
 				e.printStackTrace();
 			}
 		}
@@ -103,24 +91,22 @@ public class LabyrinthServerImpl implements LabyrinthServer
 	@Override
 	public void raiseDoorEvent(DoorClickedEvent event) throws RemoteException
 	{
-		if (!gameIsRunning())
-			return;
+		if(!gameIsRunning()) return;
 
-		for (Door d : labyrinth.getDoorList())
+		for(Door d : labyrinth.getDoorList())
 		{
-			if (d.getId() == event.getDoorId())
+			if(d.getId() == event.getDoorId())
 			{
-				int status = (d.getDoorStatus() == Door.DOOR_CLOSED) ? Door.DOOR_OPEN
-						: Door.DOOR_CLOSED;
+				int status = (d.getDoorStatus() == Door.DOOR_CLOSED) ? Door.DOOR_OPEN : Door.DOOR_CLOSED;
 
-				if (status != event.getDoorStatus()) // Drop this
-					return;
+				if(status != event.getDoorStatus()) // Drop this
+				return;
 
 				event.setDoorStatus(status);
 				d.setDoorStatus(status);
 
 				// Distribute to all people
-				for (NetworkEventHandler handler : handlers)
+				for(NetworkEventHandler handler : handlers)
 				{
 					handler.fireEvent(event);
 				}
@@ -133,11 +119,9 @@ public class LabyrinthServerImpl implements LabyrinthServer
 		this.timer.stop();
 		this.running = false;
 
-		for (NetworkEventHandler handler : handlers)
+		for(NetworkEventHandler handler : handlers)
 		{
-			handler.fireEvent(new GameEvent(GameEvent.GameEventType.GAMEENDED,
-					"Game ended, player <" + mouseWon.getColor() + "> won!",
-					mouseWon.getId()));
+			handler.fireEvent(new GameEvent(GameEvent.GameEventType.GAMEENDED, "Game ended, player <" + mouseWon.getColor() + "> won!", mouseWon.getId()));
 		}
 	}
 
@@ -147,7 +131,7 @@ public class LabyrinthServerImpl implements LabyrinthServer
 		{
 			try
 			{
-				for (Mouse mouse : getLabyrinth().getMouseList())
+				for(Mouse mouse : getLabyrinth().getMouseList())
 				{
 					int moveDirection = Mouse.DIRECTION_DOWN; // Todo:
 																// spielelogik
@@ -163,20 +147,20 @@ public class LabyrinthServerImpl implements LabyrinthServer
 					newX = mouse.getX();
 					newY = mouse.getY();
 
-					switch (moveDirection)
+					switch(moveDirection)
 					{
-					case Mouse.DIRECTION_UP:
-						newY--;
-						break;
-					case Mouse.DIRECTION_RIGHT:
-						newX++;
-						break;
-					case Mouse.DIRECTION_LEFT:
-						newX--;
-						break;
-					case Mouse.DIRECTION_DOWN:
-						newY++;
-						break;
+						case Mouse.DIRECTION_UP:
+							newY--;
+							break;
+						case Mouse.DIRECTION_RIGHT:
+							newX++;
+							break;
+						case Mouse.DIRECTION_LEFT:
+							newX--;
+							break;
+						case Mouse.DIRECTION_DOWN:
+							newY++;
+							break;
 					}
 
 					event.setNew_direction(moveDirection);
@@ -187,21 +171,21 @@ public class LabyrinthServerImpl implements LabyrinthServer
 					mouse.setY(newY);
 					mouse.setMouseDirection(moveDirection);
 
-					for (NetworkEventHandler handler : handlers)
+					for(NetworkEventHandler handler : handlers)
 					{
 						handler.fireEvent(event);
 					}
 
-					if (true) // Game ended
+					if(true) // Game ended
 					{
 						stopGame(mouse);
 						return;
 					}
 				}
-			} catch (RemoteException e1)
+			}
+			catch(RemoteException e1)
 			{
-				System.out
-						.println("actionPerformed(): Error, calling the labyrinth");
+				System.out.println("actionPerformed(): Error, calling the labyrinth");
 				e1.printStackTrace();
 			}
 		}

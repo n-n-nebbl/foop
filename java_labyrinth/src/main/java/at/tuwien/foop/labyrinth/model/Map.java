@@ -11,7 +11,8 @@ import at.tuwien.foop.labyrinth.StartLabyrinth;
 
 //the labyrinth class laods a .txt file including the map
 
-public class Map implements Serializable {
+public class Map implements Serializable
+{
 
 	private static final long serialVersionUID = -2240504228054362955L;
 	private String path;
@@ -22,23 +23,25 @@ public class Map implements Serializable {
 	private ArrayList<Mouse> mouseList = new ArrayList<Mouse>();
 	private Goal goal = null;
 	int paths = 0;
-		
-	public Map(String path) {
+
+	public Map(String path)
+	{
 		this.path = path;
 		this.loadLabyrinth();
 	}
 
-	public void loadLabyrinth(){
-						
+	public void loadLabyrinth()
+	{
+
 		try
 		{
 			Scanner sc = new Scanner(new File(this.path));
 			int width = -1;
-						
+
 			while(sc.hasNext())
 			{
 				String line = sc.next().trim();
-				
+
 				// Empty line
 				if(line.length() <= 0)
 				{
@@ -56,11 +59,11 @@ public class Map implements Serializable {
 				else
 				{
 					ArrayList<Entity> currentLine = new ArrayList<Entity>();
-					
+
 					for(int i = 0; i < line.length(); i++)
 					{
 						char c = line.charAt(i);
-						
+
 						switch(c)
 						{
 							case 'W':
@@ -84,33 +87,34 @@ public class Map implements Serializable {
 								sc.close();
 								StartLabyrinth.onExit();
 								System.exit(0);
-								return;						
+								return;
 						}
 					}
 
 					this.field.add(currentLine);
 					this.height++;
 					width = this.width = currentLine.size();
-					
+
 				}
 			}
 			sc.close();
 
-		} catch (FileNotFoundException e) {
+		}
+		catch(FileNotFoundException e)
+		{
 			System.out.println("Error loading Field!");
 			StartLabyrinth.onExit();
 			System.exit(0);
-			return;				
-		}		
-		
-		
+			return;
+		}
+
 		if(goal == null)
 		{
 			System.out.println("Error, no goal in the map field!");
 			StartLabyrinth.onExit();
 			System.exit(0);
-			return;				
-		}	
+			return;
+		}
 
 		// No places
 		if(paths <= 0)
@@ -118,14 +122,14 @@ public class Map implements Serializable {
 			System.out.println("Error, no entries for mouses existing!");
 			StartLabyrinth.onExit();
 			System.exit(0);
-			return;			
-		}		
+			return;
+		}
 	}
-	
+
 	public Mouse addMouse()
-	{		
+	{
 		Random randomGenerator = new Random();
-		
+
 		// Place the mouses somewhere -> random till we get a P. There is a P(logic in loadLabyrinth)
 		while(true)
 		{
@@ -133,7 +137,7 @@ public class Map implements Serializable {
 			ArrayList<Entity> currentLine = field.get(y);
 			int x = randomGenerator.nextInt(currentLine.size());
 			Entity e = currentLine.get(x);
-			
+
 			if(e.getClass() == Path.class)
 			{
 				Mouse m = new Mouse(x, y);
@@ -142,28 +146,35 @@ public class Map implements Serializable {
 			}
 		}
 	}
-	
-	public Entity getField(int x, int y){
+
+	public Entity getField(int x, int y)
+	{
 		return field.get(y).get(x);
 	}
 
-	public Mouse getMouseByID(int id){
-		for (Mouse m : mouseList) {
-			if (m.getId() == id) {
+	public Mouse getMouseByID(int id)
+	{
+		for(Mouse m : mouseList)
+		{
+			if(m.getId() == id)
+			{
 				return m;
 			}
 		}
-		
+
 		return null;
 	}
-		
-	public Door getDoorByID(int id){
-		for (Door d : doorList) {
-			if (d.getId() == id) {
+
+	public Door getDoorByID(int id)
+	{
+		for(Door d : doorList)
+		{
+			if(d.getId() == id)
+			{
 				return d;
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -177,11 +188,13 @@ public class Map implements Serializable {
 		return this.mouseList;
 	}
 
-	public int getWidth() {
+	public int getWidth()
+	{
 		return this.width;
 	}
-	
-	public int getHeight() {
+
+	public int getHeight()
+	{
 		return this.height;
 	}
 }

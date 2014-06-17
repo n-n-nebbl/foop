@@ -5,7 +5,8 @@ import java.util.Date;
 
 import javax.swing.ImageIcon;
 
-public class Door extends Entity {
+public class Door extends Entity
+{
 
 	private static final long serialVersionUID = -3570584812440078263L;
 	public static final int DOOR_OPEN = 1;
@@ -21,7 +22,8 @@ public class Door extends Entity {
 
 	private long lastTimeChanged;
 
-	public Door() {
+	public Door()
+	{
 		super(' ');
 		this.id = SequenceGenerator.getNextId("Door");
 		this.doorStatus = DOOR_CLOSED;
@@ -29,65 +31,80 @@ public class Door extends Entity {
 		this.lastTimeChanged = 0;
 	}
 
-	public int getId() {
+	public int getId()
+	{
 		return id;
 	}
 
-	public int getDoorStatus() {
+	public int getDoorStatus()
+	{
 		return doorStatus;
 	}
 
-	public void setDoorStatus(int doorStatus) {
+	public void setDoorStatus(int doorStatus)
+	{
 		this.doorStatus = doorStatus;
 		refreshCharacter();
 	}
 
-	public int getDoorDirection() {
+	public int getDoorDirection()
+	{
 		return doorDirection;
 	}
 
-	public void setDoorDirection(int doorDirection) {
+	public void setDoorDirection(int doorDirection)
+	{
 		this.doorDirection = doorDirection;
 		refreshCharacter();
 	}
 
-	public long getLastTimeChanged() {
+	public long getLastTimeChanged()
+	{
 		return lastTimeChanged;
 	}
 
-	public void setLastTimeChanged(long lastTimeChanged) {
+	public void setLastTimeChanged(long lastTimeChanged)
+	{
 		this.lastTimeChanged = lastTimeChanged;
 	}
-	
-	public Image getImg() {
+
+	public Image getImg()
+	{
 		return img;
 	}
-
 
 	/**
 	 * @return the time between now and the last change to the door
 	 */
-	public long timeSinceLastChange() {
+	public long timeSinceLastChange()
+	{
 		return new Date().getTime() - lastTimeChanged;
 	}
 
 	/**
 	 * @param duration
 	 *            duration in ms
-	 * @return true if duration is greater than or equals the time the last
-	 *         change to the door has happend
+	 * @return true if duration is greater than or equals the time the last change to the door has happend
 	 */
-	public boolean timeSinceLastChangeGE(long duration) {
+	public boolean timeSinceLastChangeGE(long duration)
+	{
 		return timeSinceLastChange() >= duration;
 	}
 
-	private void refreshCharacter() {
-		if (this.doorStatus == DOOR_OPEN) {
+	private void refreshCharacter()
+	{
+		if(this.doorStatus == DOOR_OPEN)
+		{
 			setCharacter('/');
-		} else {
-			if (this.doorDirection == DOOR_HORIZONTAL) {
+		}
+		else
+		{
+			if(this.doorDirection == DOOR_HORIZONTAL)
+			{
 				setCharacter('-');
-			} else {
+			}
+			else
+			{
 				setCharacter('|');
 			}
 		}

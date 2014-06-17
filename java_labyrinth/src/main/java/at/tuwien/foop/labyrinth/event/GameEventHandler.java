@@ -10,18 +10,21 @@ import at.tuwien.foop.labyrinth.gui.LabyrinthController;
 import at.tuwien.foop.labyrinth.model.Mouse;
 
 @Component
-public class GameEventHandler implements EventHandler<GameEvent> {
+public class GameEventHandler implements EventHandler<GameEvent>
+{
 
 	@Resource
-	private LabyrinthController labyrinthController;	
-	
+	private LabyrinthController labyrinthController;
+
 	@Override
-	public void eventFired(GameEvent event) {
+	public void eventFired(GameEvent event)
+	{
 		labyrinthController.gotGameEvent(event);
 	}
 
 	@Override
-	public Class<GameEvent> getEventClass() {
+	public Class<GameEvent> getEventClass()
+	{
 		return GameEvent.class;
 	}
 }

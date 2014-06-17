@@ -8,42 +8,50 @@ import at.tuwien.foop.labyrinth.gui.LabyrinthController;
 import at.tuwien.foop.labyrinth.model.Door;
 
 @Component
-public class DoorClickedEventHandler implements EventHandler<DoorClickedEvent> 
+public class DoorClickedEventHandler implements EventHandler<DoorClickedEvent>
 {
 	@Resource
-	private LabyrinthController labyrinthController;	
-	
+	private LabyrinthController labyrinthController;
+
 	@Resource(name = "doorList")
 	private List<Door> doorList;
 
 	@Override
-	public void eventFired(DoorClickedEvent event) {
-		System.out.println("DoorEvent: ID(" + event.getDoorId() + "), Status("
-				+ event.getDoorStatus() + ")");
+	public void eventFired(DoorClickedEvent event)
+	{
+		System.out.println("DoorEvent: ID(" + event.getDoorId() + "), Status(" + event.getDoorStatus() + ")");
 		Door d = findDoorWithId(event.getDoorId());
-		if (d == null) {
+		if(d == null)
+		{
 			System.out.println("Door not found: id(" + event.getDoorId() + ")");
 			return;
-		} else {
+		}
+		else
+		{
 			System.out.println("Door found: id(" + event.getDoorId() + ")");
 		}
 		d.setDoorStatus(event.getDoorStatus());
-		
+
 		labyrinthController.gotDoorEvent(event, d);
 	}
 
-	public void setDoors(List<Door> doorList) {
+	public void setDoors(List<Door> doorList)
+	{
 		this.doorList = doorList;
 	}
 
 	@Override
-	public Class<DoorClickedEvent> getEventClass() {
+	public Class<DoorClickedEvent> getEventClass()
+	{
 		return DoorClickedEvent.class;
 	}
 
-	private Door findDoorWithId(int id) {
-		for (Door d : doorList) {
-			if (d.getId() == id) {
+	private Door findDoorWithId(int id)
+	{
+		for(Door d : doorList)
+		{
+			if(d.getId() == id)
+			{
 				return d;
 			}
 		}

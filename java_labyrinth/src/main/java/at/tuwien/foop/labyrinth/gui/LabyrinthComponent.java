@@ -12,8 +12,6 @@ import javax.annotation.Resource;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.Timer;
-
 import org.springframework.stereotype.Component;
 
 import at.tuwien.foop.labyrinth.model.Door;
@@ -48,6 +46,7 @@ public class LabyrinthComponent extends JPanel implements ActionListener
 		openedDoorImg = new ImageIcon("./images/opened_door.png");
 	}
 
+	@Override
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -101,6 +100,7 @@ public class LabyrinthComponent extends JPanel implements ActionListener
 
 						doorButton.addActionListener(new ActionListener()
 						{
+							@Override
 							public void actionPerformed(ActionEvent e)
 							{
 								if(doorButton.getIcon() == closedDoorImg)

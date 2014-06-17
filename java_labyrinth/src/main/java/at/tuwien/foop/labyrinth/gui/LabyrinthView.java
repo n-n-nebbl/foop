@@ -114,6 +114,7 @@ public class LabyrinthView extends Observable
 		// Todo: MVC Concept?
 		startButton.addActionListener(new ActionListener()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				try
@@ -156,6 +157,7 @@ public class LabyrinthView extends Observable
 	private class ExitWindowAdapter extends WindowAdapter
 	{
 		// Close the labyrinth and exit
+		@Override
 		public void windowClosing(WindowEvent e)
 		{
 
@@ -173,6 +175,7 @@ public class LabyrinthView extends Observable
 			this.wonMouse = wonMouse;
 		}
 
+		@Override
 		public void run()
 		{
 			JOptionPane.showMessageDialog(null, "Game ended, player <" + wonMouse.getColor() + "> won!", "Game ended", JOptionPane.PLAIN_MESSAGE);

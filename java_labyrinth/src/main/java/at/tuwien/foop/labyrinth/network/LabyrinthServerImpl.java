@@ -58,6 +58,7 @@ public class LabyrinthServerImpl implements LabyrinthServer
 	}
 
 	// TODO: wenn das spiel bereits läuft -> ...
+	@Override
 	public void startGame()
 	{
 		if(this.running) return;
@@ -127,6 +128,7 @@ public class LabyrinthServerImpl implements LabyrinthServer
 
 	private class GameRoundTimer implements ActionListener
 	{
+		@Override
 		public void actionPerformed(ActionEvent e)
 		{
 			try

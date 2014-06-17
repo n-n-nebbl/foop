@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import at.tuwien.foop.labyrinth.event.Event;
 import at.tuwien.foop.labyrinth.event.EventBus;
-import at.tuwien.foop.labyrinth.model.Mouse;
 
 @Component
 public class NetworkEventHandlerImpl implements NetworkEventHandler

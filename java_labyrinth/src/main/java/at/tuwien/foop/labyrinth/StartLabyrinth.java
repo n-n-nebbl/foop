@@ -1,6 +1,5 @@
 package at.tuwien.foop.labyrinth;
 
-import java.net.BindException;
 import java.rmi.ConnectException;
 import java.rmi.RemoteException;
 
@@ -14,7 +13,6 @@ import at.tuwien.foop.labyrinth.event.GameEvent;
 import at.tuwien.foop.labyrinth.event.GameEvent.GameEventType;
 import at.tuwien.foop.labyrinth.event.MouseMoveEvent;
 import at.tuwien.foop.labyrinth.gui.LabyrinthController;
-import at.tuwien.foop.labyrinth.gui.LabyrinthView;
 import at.tuwien.foop.labyrinth.model.Door;
 import at.tuwien.foop.labyrinth.network.LabyrinthServer;
 import at.tuwien.foop.labyrinth.network.LabyrinthServerImpl;

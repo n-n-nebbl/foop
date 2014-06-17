@@ -3,8 +3,6 @@ package at.tuwien.foop.labyrinth.model;
 import java.awt.Image;
 import java.util.Date;
 
-import javax.swing.ImageIcon;
-
 public class Door extends Entity
 {
 

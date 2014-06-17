@@ -1,9 +1,5 @@
 package at.tuwien.foop.labyrinth.model;
 
-import java.awt.Image;
-
-import javax.swing.ImageIcon;
-
 public class Mouse extends Entity
 {
 

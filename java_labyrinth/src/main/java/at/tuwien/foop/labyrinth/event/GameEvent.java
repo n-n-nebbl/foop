@@ -1,7 +1,5 @@
 package at.tuwien.foop.labyrinth.event;
 
-import at.tuwien.foop.labyrinth.model.Mouse;
-
 public class GameEvent implements Event
 {
 	public enum GameEventType

@@ -83,20 +83,21 @@ public class LabyrinthServerImpl implements LabyrinthServer
 				}
 				if(mouse.getOldState() != null)
 				{
-					MouseState newDirection = possibleMoves.get(mouse.getState().getDirection());
-					// when old direction possible -> move on
-					if(newDirection != null)
-					{
-						System.out.println(1 + " old dir " + mouse.getState().getDirection());
-						return newDirection;
-					}
+					// MouseState newDirection = possibleMoves.get(mouse.getState().getDirection());
+					// // when old direction possible -> move on
+					// if(newDirection != null)
+					// {
+					// System.out.println(1 + " old dir " + mouse.getState().getDirection());
+					// return newDirection;
+					// }
 
 					// when there is another opportunity -> remove move to old position
 					if(possibleMoves.size() > 1)
 					{
-						synchronized(possibleMoves)
+						List<MouseState> possibleMovesList = Collections.synchronizedList(new ArrayList<MouseState>(possibleMoves.values()));
+						synchronized(possibleMovesList)
 						{
-							for(MouseState state : possibleMoves.values())
+							for(MouseState state : possibleMovesList)
 							{
 								if(state.getX() == mouse.getOldState().getX() && state.getY() == mouse.getOldState().getY())
 								{

@@ -1,0 +1,6 @@
+An einer Seite oder Ecke befindet sich genau ein Ausgang
+An der gegenüberliegenden Seite oder Ecke befinden sich mehrere (mehr oder weniger weit voneinander entfernte) Eingänge.
+Die am Mäuserennen teilnehmenden hungrigen Mäuse betreten das Spielfeld gleichzeitig durch zufällig gewählte Eingänge und streben rasch und kerzengerade auf den Ausgang zu.
+Wenn ihnen eine Mauer im Weg steht, laufen sie in jener Richtung an der Mauer entlang, die sie (in Luftlinie) näher an den Ausgang bringt.
+Wenn Mäuse in eine Sackgasse geraten, laufen sie ein kurzes Stück in eine zufällig gewählte andere, nicht durch eine Mauer blockierte Richtung. Danach beginnen sie aber wieder damit, in möglichst direkter Linie auf den Ausgang zuzulaufen.
+Wenn sich zwei Mäuse begegnen, beschnuppern sie sich zunächst, das heißt, sie legen eine Pause ein. Danach trennen sie sich und laufen ein Stück in zufällig gewählte unterschiedliche Richtungen, bevor sie wieder auf den Ausgang zulaufen.

@@ -5,11 +5,7 @@ public class Mouse extends Entity
 
 	public enum MouseColor
 	{
-		RED(2),
-		GREEN(1),
-		BLUE(0),
-		ORANGE(3),
-		BROWN(4); // Must be inc +1
+		RED(2), GREEN(1), BLUE(0), ORANGE(3), BROWN(4); // Must be inc +1
 		public static int maxColor = 4;
 
 		private int code;
@@ -27,10 +23,7 @@ public class Mouse extends Entity
 
 	public enum MouseDirection
 	{
-		UP(0),
-		RIGHT(1),
-		DOWN(2),
-		LEFT(3);
+		UP(0), RIGHT(1), DOWN(2), LEFT(3);
 
 		@SuppressWarnings("unused")
 		private int code;
@@ -42,16 +35,16 @@ public class Mouse extends Entity
 
 		public MouseDirection getNext()
 		{
-			switch(this)
+			switch (this)
 			{
-				case UP:
-					return RIGHT;
-				case RIGHT:
-					return DOWN;
-				case DOWN:
-					return LEFT;
-				case LEFT:
-					return UP;
+			case UP:
+				return RIGHT;
+			case RIGHT:
+				return DOWN;
+			case DOWN:
+				return LEFT;
+			case LEFT:
+				return UP;
 
 			}
 			return UP;
@@ -62,6 +55,7 @@ public class Mouse extends Entity
 	private static final long serialVersionUID = -4624485550774716174L;
 	private static int lastColor = 1;
 	private int id;
+	private int timesToSniff = -1;
 	private MouseState state;
 	private MouseState oldState;
 	private MouseColor mouseColor;
@@ -79,6 +73,16 @@ public class Mouse extends Entity
 	public MouseColor getColor()
 	{
 		return this.mouseColor;
+	}
+
+	public int getTimesToSniff()
+	{
+		return this.timesToSniff;
+	}
+
+	public void setTimesToSniff(int value)
+	{
+		this.timesToSniff = value;
 	}
 
 	public int getId()
@@ -113,20 +117,20 @@ public class Mouse extends Entity
 
 	private void refreshCharacter()
 	{
-		switch(state.getDirection())
+		switch (state.getDirection())
 		{
-			case UP:
-				setCharacter('^');
-				break;
-			case RIGHT:
-				setCharacter('>');
-				break;
-			case DOWN:
-				setCharacter('v');
-				break;
-			case LEFT:
-				setCharacter('<');
-				break;
+		case UP:
+			setCharacter('^');
+			break;
+		case RIGHT:
+			setCharacter('>');
+			break;
+		case DOWN:
+			setCharacter('v');
+			break;
+		case LEFT:
+			setCharacter('<');
+			break;
 		}
 	}
 

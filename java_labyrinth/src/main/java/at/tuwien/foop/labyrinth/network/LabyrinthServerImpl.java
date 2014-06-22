@@ -65,6 +65,37 @@ public class LabyrinthServerImpl implements LabyrinthServer
 
 		private MouseState nextMove(Mouse mouse) throws RemoteException
 		{
+			// Sniffing happend a short time before -> first time random
+			// direction, den forward
+			// TODO: implement this!!
+			if (mouse.getTimesToSniff() <= -1)
+			{
+				mouse.setTimesToSniff(mouse.getTimesToSniff() + 1);
+			} else if (getLabyrinth().mouseFieldContainsOtherMouse(mouse))
+			{
+				// Activate sniffing
+				if (mouse.getTimesToSniff() < 0)
+				{
+					mouse.setTimesToSniff(30);
+				}
+
+				// Keep state
+				if (mouse.getTimesToSniff() > 0)
+				{
+					mouse.setTimesToSniff(mouse.getTimesToSniff() - 1);
+
+					return new MouseState(mouse.getX(), mouse.getY(), mouse
+							.getState().getDirection()); // Keep position
+				}
+
+				// Stop sniffing
+				if (mouse.getTimesToSniff() <= 0)
+				{
+					mouse.setTimesToSniff(-15);
+				}
+
+			}
+
 			List<MouseDirection> directions = new ArrayList<MouseDirection>(
 					Arrays.asList(MouseDirection.values()));
 			java.util.Map<MouseDirection, MouseState> possibleMoves = Collections

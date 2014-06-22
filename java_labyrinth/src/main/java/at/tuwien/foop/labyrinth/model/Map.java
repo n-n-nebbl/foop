@@ -34,15 +34,16 @@ public class Map implements Serializable
 	{
 		Random randomGenerator = new Random();
 
-		// Place the mouses somewhere -> random till we get a P. There is a P(logic in loadLabyrinth)
-		while(true)
+		// Place the mouses somewhere -> random till we get a P. There is a
+		// P(logic in loadLabyrinth)
+		while (true)
 		{
 			int y = randomGenerator.nextInt(this.field.size());
 			ArrayList<Entity> currentLine = field.get(y);
 			int x = randomGenerator.nextInt(currentLine.size());
 			Entity e = currentLine.get(x);
 
-			if(e.isPath())
+			if (e.isPath())
 			{
 				Mouse m = new Mouse(x, y);
 				this.mouseList.add(m);
@@ -53,9 +54,9 @@ public class Map implements Serializable
 
 	public Door getDoorByID(int id)
 	{
-		for(Door d : doorList)
+		for (Door d : doorList)
 		{
-			if(d.getId() == id)
+			if (d.getId() == id)
 			{
 				return d;
 			}
@@ -79,11 +80,27 @@ public class Map implements Serializable
 		return this.height;
 	}
 
+	public boolean mouseFieldContainsOtherMouse(Mouse currentMouse)
+	{
+		for (Mouse m : mouseList)
+		{
+			if (m.getId() != currentMouse.getId()
+					&& m.getState().getX() == currentMouse.getState().getX()
+					&& m.getState().getY() == currentMouse.getState().getY())
+			{
+				return true;
+			}
+
+		}
+
+		return false;
+	}
+
 	public Mouse getMouseByID(int id)
 	{
-		for(Mouse m : mouseList)
+		for (Mouse m : mouseList)
 		{
-			if(m.getId() == id)
+			if (m.getId() == id)
 			{
 				return m;
 			}
@@ -110,18 +127,18 @@ public class Map implements Serializable
 			Scanner sc = new Scanner(new File(this.path));
 			int width = -1;
 
-			while(sc.hasNext())
+			while (sc.hasNext())
 			{
 				String line = sc.next().trim();
 
 				// Empty line
-				if(line.length() <= 0)
+				if (line.length() <= 0)
 				{
 					break;
-				}
-				else if(width != -1 && line.length() != width)
+				} else if (width != -1 && line.length() != width)
 				{
-					System.out.println("loadLabyrinth(): Error, line lenght is not equal for all.");
+					System.out
+							.println("loadLabyrinth(): Error, line lenght is not equal for all.");
 					sc.close();
 					StartLabyrinth.onExit();
 					System.exit(0);
@@ -132,34 +149,35 @@ public class Map implements Serializable
 				{
 					ArrayList<Entity> currentLine = new ArrayList<Entity>();
 
-					for(int i = 0; i < line.length(); i++)
+					for (int i = 0; i < line.length(); i++)
 					{
 						char c = line.charAt(i);
 
-						switch(c)
+						switch (c)
 						{
-							case 'W':
-								currentLine.add(new Wall());
-								break;
-							case 'P':
-								currentLine.add(new Path());
-								this.paths++;
-								break;
-							case 'G':
-								this.goal = new Goal();
-								currentLine.add(this.goal);
-								break;
-							case 'D':
-								Door d = new Door();
-								doorList.add(d);
-								currentLine.add(d);
-								break;
-							default:
-								System.out.println("loadLabyrinth(): Strange char in labyrinth file.");
-								sc.close();
-								StartLabyrinth.onExit();
-								System.exit(0);
-								return;
+						case 'W':
+							currentLine.add(new Wall());
+							break;
+						case 'P':
+							currentLine.add(new Path());
+							this.paths++;
+							break;
+						case 'G':
+							this.goal = new Goal();
+							currentLine.add(this.goal);
+							break;
+						case 'D':
+							Door d = new Door();
+							doorList.add(d);
+							currentLine.add(d);
+							break;
+						default:
+							System.out
+									.println("loadLabyrinth(): Strange char in labyrinth file.");
+							sc.close();
+							StartLabyrinth.onExit();
+							System.exit(0);
+							return;
 						}
 					}
 
@@ -171,8 +189,7 @@ public class Map implements Serializable
 			}
 			sc.close();
 
-		}
-		catch(FileNotFoundException e)
+		} catch (FileNotFoundException e)
 		{
 			System.out.println("Error loading Field!");
 			StartLabyrinth.onExit();
@@ -180,7 +197,7 @@ public class Map implements Serializable
 			return;
 		}
 
-		if(goal == null)
+		if (goal == null)
 		{
 			System.out.println("Error, no goal in the map field!");
 			StartLabyrinth.onExit();
@@ -189,7 +206,7 @@ public class Map implements Serializable
 		}
 
 		// No places
-		if(paths <= 0)
+		if (paths <= 0)
 		{
 			System.out.println("Error, no entries for mouses existing!");
 			StartLabyrinth.onExit();

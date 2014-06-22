@@ -11,7 +11,6 @@ import java.util.Observable;
 import javax.annotation.Resource;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 import org.springframework.stereotype.Component;
 
@@ -36,7 +35,7 @@ public class LabyrinthView extends Observable
 		@Override
 		public void run()
 		{
-			JOptionPane.showMessageDialog(null, "Game ended, player <" + wonMouse.getColor() + "> won!", "Game ended", JOptionPane.PLAIN_MESSAGE);
+			Dialogs.showGameEndedDialog(wonMouse);
 		}
 	}
 
@@ -69,7 +68,6 @@ public class LabyrinthView extends Observable
 
 	public LabyrinthView()
 	{
-		waitForGameStart();
 	}
 
 	public int getClickedButtonID()
@@ -96,7 +94,7 @@ public class LabyrinthView extends Observable
 
 	public void setGameRunning(Map labyrinth)
 	{
-		if(f != null)
+		if (f != null)
 		{
 			f.setVisible(false);
 		}
@@ -117,13 +115,12 @@ public class LabyrinthView extends Observable
 
 	public void setTitel(String text)
 	{
-		if(f != null)
+		if (f != null)
 		{
-			if(text.isEmpty())
+			if (text.isEmpty())
 			{
 				f.setTitle("Mouse Labyrinth");
-			}
-			else
+			} else
 			{
 				f.setTitle("Mouse Labyrinth - " + text);
 			}
@@ -138,16 +135,16 @@ public class LabyrinthView extends Observable
 	public void waitForGameStart(int wonID)
 	{
 
-		if(f != null)
+		if (f != null)
 		{
 			f.setVisible(false);
 		}
 
-		if(wonID != -1 && f != null)
+		if (wonID != -1 && f != null)
 		{
-			for(Mouse m : mouseList)
+			for (Mouse m : mouseList)
 			{
-				if(m.getId() == wonID)
+				if (m.getId() == wonID)
 				{
 					(new Thread(new DialogRunnable(m))).start();
 				}
@@ -177,18 +174,18 @@ public class LabyrinthView extends Observable
 			{
 				try
 				{
-					if(StartLabyrinth.getLabyrinthServer().gameIsRunning())
+					if (StartLabyrinth.getLabyrinthServer().gameIsRunning())
 					{
-						System.out.println("LabyrinthView(): Error, game already running.");
-					}
-					else
+						System.out
+								.println("LabyrinthView(): Error, game already running.");
+					} else
 					{
 						StartLabyrinth.getLabyrinthServer().startGame();
 					}
-				}
-				catch(RemoteException e1)
+				} catch (RemoteException e1)
 				{
-					System.out.println("LabyrinthView(): Error, distributing event.");
+					System.out
+							.println("LabyrinthView(): Error, distributing event.");
 					e1.printStackTrace();
 				}
 			}

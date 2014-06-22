@@ -1,6 +1,5 @@
 package at.tuwien.foop.labyrinth;
 
-import java.rmi.ConnectException;
 import java.rmi.RemoteException;
 
 import javax.swing.SwingUtilities;
@@ -10,6 +9,7 @@ import org.springframework.beans.BeansException;
 import at.tuwien.foop.labyrinth.event.EventBus;
 import at.tuwien.foop.labyrinth.event.GameEvent;
 import at.tuwien.foop.labyrinth.event.GameEvent.GameEventType;
+import at.tuwien.foop.labyrinth.gui.Dialogs;
 import at.tuwien.foop.labyrinth.gui.LabyrinthController;
 import at.tuwien.foop.labyrinth.network.LabyrinthServer;
 import at.tuwien.foop.labyrinth.network.LabyrinthServerImpl;
@@ -29,41 +29,61 @@ public class StartLabyrinth
 		return remote;
 	}
 
-	public static void main(String[] args) throws BeansException, RemoteException
+	public static void main(String[] args) throws BeansException,
+			RemoteException
 	{
 		EventBus bus = ContextHolder.getContext().getBean(EventBus.class);
 
-		bus.fireEvent(new GameEvent(GameEventType.INFORMATION, "Game initialising..."));
+		bus.fireEvent(new GameEvent(GameEventType.INFORMATION,
+				"Game initialising..."));
 
 		rmiService = ContextHolder.getContext().getBean(RmiService.class);
 
 		// Local host mode only! Can be changed!
 
-		try
-		// Trying to start the server
+		boolean serverMode = Dialogs.showServerOrClientDialog();
+
+		if (serverMode)
 		{
-			rmiService.startRegistry();
-			server = new LabyrinthServerImpl();
-			rmiService.bindLabyrinthServer(server);
-		}
-		catch(java.rmi.server.ExportException e) // If there is already a
-													// server -> client mode
-		{
-			System.out.println("Server already running, client mode.");
-			// e.printStackTrace();
+			// Trying to start the server
+			try
+			{
+				rmiService.startRegistry();
+				server = new LabyrinthServerImpl();
+				rmiService.bindLabyrinthServer(server);
+			} catch (java.rmi.server.ExportException e) // If there is already a
+														// server -> client mode
+			{
+				System.out.println("Server already running, client mode.");
+				// e.printStackTrace();
+			}
 		}
 
 		try
 		{
-			remote = rmiService.getLabyrinthServer("localhost");
-		}
-		catch(ConnectException e)
+			if (serverMode)
+				remote = rmiService.getLabyrinthServer("localhost");
+			else
+			{
+				String address = Dialogs.showIPDialog();
+
+				if (address == null || address.isEmpty())
+				{
+					onExit();
+					return;
+				}
+
+				remote = rmiService.getLabyrinthServer(address);
+			}
+		} catch (Exception e)
 		{
 			System.out.println("Error, connecting to the server.");
 			e.printStackTrace();
+			onExit();
+			return;
 		}
 
-		if(remote.gameIsRunning())
+		if (remote.gameIsRunning())
 		{
 			System.out.println("Error, game is already running...");
 			onExit();
@@ -76,29 +96,33 @@ public class StartLabyrinth
 			@Override
 			public void run()
 			{
-				LabyrinthController controller = ContextHolder.getContext().getBean(LabyrinthController.class);
+				System.out.println("Starting.");
+
+				LabyrinthController controller = ContextHolder.getContext()
+						.getBean(LabyrinthController.class);
 				try
 				{
 					controller.control();
-				}
-				catch(RemoteException e)
+				} catch (RemoteException e)
 				{
-					System.out.println("Error, getting the labyrinth from the server.");
+					System.out
+							.println("Error, getting the labyrinth from the server.");
 					e.printStackTrace();
 				}
 			}
 		});
 
 		// Connects the bus
-		networkEventHandlerConnectedToEventBus = (NetworkEventHandler)ContextHolder.getContext().getBean("networkEventHandlerStub");
+		networkEventHandlerConnectedToEventBus = (NetworkEventHandler) ContextHolder
+				.getContext().getBean("networkEventHandlerStub");
 
 		try
 		{
 			remote.addNetworkEventHandler(networkEventHandlerConnectedToEventBus);
-		}
-		catch(RemoteException r)
+		} catch (RemoteException r)
 		{
-			System.out.println("Error, adding to the player list: " + r.toString());
+			System.out.println("Error, adding to the player list: "
+					+ r.toString());
 		}
 	}
 
@@ -106,9 +130,9 @@ public class StartLabyrinth
 	{
 		try
 		{
-			remote.removeNetworkEventHandler(networkEventHandlerConnectedToEventBus);
-		}
-		catch(RemoteException e1)
+			if (remote != null)
+				remote.removeNetworkEventHandler(networkEventHandlerConnectedToEventBus);
+		} catch (RemoteException e1)
 		{
 			System.out.println("Error, removing network event handler.");
 			e1.printStackTrace();

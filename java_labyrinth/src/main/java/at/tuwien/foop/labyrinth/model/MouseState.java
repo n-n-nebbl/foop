@@ -28,21 +28,33 @@ public class MouseState implements Serializable
 		this.direction = mouse.getState().getDirection();
 	}
 
-	public void forward()
+	public void forward(int maxX, int maxY)
 	{
 		switch (direction)
 		{
 		case UP:
-			y--;
-			break;
-		case RIGHT:
-			x++;
-			break;
-		case LEFT:
-			x--;
+			if (y > 0)
+			{
+				y--;
+			}
 			break;
 		case DOWN:
-			y++;
+			if (y < maxY - 1)
+			{
+				y++;
+			}
+			break;
+		case LEFT:
+			if (x > 0)
+			{
+				x--;
+			}
+			break;
+		case RIGHT:
+			if (x < maxX - 1)
+			{
+				x++;
+			}
 			break;
 		}
 	}

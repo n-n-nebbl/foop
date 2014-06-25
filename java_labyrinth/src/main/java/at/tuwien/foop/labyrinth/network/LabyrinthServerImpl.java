@@ -135,7 +135,8 @@ public class LabyrinthServerImpl implements LabyrinthServer
 				{
 					MouseState move = new MouseState(mouse.getX(),
 							mouse.getY(), direction, false);
-					move.forward();
+					move.forward(getLabyrinth().getWidth(), getLabyrinth()
+							.getHeight());
 
 					if (getLabyrinth().getField(move.getX(), move.getY())
 							.isFree())

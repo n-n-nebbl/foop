@@ -31,12 +31,17 @@ public abstract class Entity implements Serializable
 
 	private boolean isOpenDoor()
 	{
-		return (this.getClass() == Door.class ? ((Door)this).isOpen() : false);
+		return (this.getClass() == Door.class ? ((Door) this).isOpen() : false);
 	}
 
 	public boolean isPath()
 	{
 		return this.getClass() == Path.class;
+	}
+
+	public boolean isEntry()
+	{
+		return this.getClass() == Entry.class;
 	}
 
 	public boolean isWall()

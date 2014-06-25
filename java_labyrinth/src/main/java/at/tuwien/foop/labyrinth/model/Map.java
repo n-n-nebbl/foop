@@ -21,6 +21,7 @@ public class Map implements Serializable
 	private int height = 0;
 	private ArrayList<Door> doorList = new ArrayList<Door>();
 	private ArrayList<Mouse> mouseList = new ArrayList<Mouse>();
+	private ArrayList<Entry> entryList = new ArrayList<Entry>();
 	private Goal goal = null;
 	int paths = 0;
 
@@ -43,9 +44,10 @@ public class Map implements Serializable
 			int x = randomGenerator.nextInt(currentLine.size());
 			Entity e = currentLine.get(x);
 
-			if (e.isPath())
+			if (e.isEntry() && !entryList.contains(e))
 			{
 				Mouse m = new Mouse(x, y);
+				this.entryList.add((Entry) e);
 				this.mouseList.add(m);
 				return m;
 			}
@@ -169,6 +171,9 @@ public class Map implements Serializable
 						case 'W':
 							currentLine.add(new Wall());
 							break;
+						case 'E':
+							currentLine.add(new Entry());
+							break;
 						case 'P':
 							currentLine.add(new Path());
 							this.paths++;
@@ -229,5 +234,6 @@ public class Map implements Serializable
 	public void reset()
 	{
 		this.mouseList.clear();
+		this.entryList.clear();
 	}
 }

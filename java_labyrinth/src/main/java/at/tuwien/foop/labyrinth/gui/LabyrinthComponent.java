@@ -108,6 +108,10 @@ public class LabyrinthComponent extends JPanel implements ActionListener
 				{
 					g.setColor(Color.white);
 					g.fillRect(x * 20, y * 20, 20, 20);
+				} else if (map.getField(x, y).isEntry())
+				{
+					g.setColor(Color.gray);
+					g.fillRect(x * 20, y * 20, 20, 20);
 				} else if (map.getField(x, y).isGoal())
 				{
 					g.setColor(Color.yellow);

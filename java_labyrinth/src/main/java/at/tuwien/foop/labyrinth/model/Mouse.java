@@ -56,6 +56,7 @@ public class Mouse extends Entity
 	private static int lastColor = 1;
 	private int id;
 	private int timesToSniff = -1;
+	private Mouse sniffPartner = null;
 	private MouseState state;
 	private MouseState oldState;
 	private MouseColor mouseColor;
@@ -83,6 +84,16 @@ public class Mouse extends Entity
 	public void setTimesToSniff(int value)
 	{
 		this.timesToSniff = value;
+	}
+
+	public void setSniffPartner(Mouse sniffPartner)
+	{
+		this.sniffPartner = sniffPartner;
+	}
+
+	public Mouse getSniffPartner()
+	{
+		return this.sniffPartner;
 	}
 
 	public int getId()

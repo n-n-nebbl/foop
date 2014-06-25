@@ -51,30 +51,34 @@ public class LabyrinthComponent extends JPanel implements ActionListener
 		repaint();
 	}
 
-	public Image createMouseImage(MouseColor m)
+	public Image createMouseImage(Mouse mouse)
 	{
+		if (mouse.getSniffPartner() != null)
+			return new ImageIcon("./images/mouth.png").getImage();
+
+		MouseColor m = mouse.getMouseColor();
 		ImageIcon i;
 
-		switch(m)
+		switch (m)
 		{
-			case RED:
-				i = new ImageIcon("./images/player_red.png");
-				break;
-			case GREEN:
-				i = new ImageIcon("./images/player_green.png");
-				break;
-			case BLUE:
-				i = new ImageIcon("./images/player_blue.png");
-				break;
-			case ORANGE:
-				i = new ImageIcon("./images/player_orange.png");
-				break;
-			case BROWN:
-				i = new ImageIcon("./images/player_brown.png");
-				break;
-			default:
-				System.out.println("createMouseImage(): Error, color not found!");
-				return null;
+		case RED:
+			i = new ImageIcon("./images/player_red.png");
+			break;
+		case GREEN:
+			i = new ImageIcon("./images/player_green.png");
+			break;
+		case BLUE:
+			i = new ImageIcon("./images/player_blue.png");
+			break;
+		case ORANGE:
+			i = new ImageIcon("./images/player_orange.png");
+			break;
+		case BROWN:
+			i = new ImageIcon("./images/player_brown.png");
+			break;
+		default:
+			System.out.println("createMouseImage(): Error, color not found!");
+			return null;
 		}
 		return i.getImage();
 	}
@@ -84,49 +88,56 @@ public class LabyrinthComponent extends JPanel implements ActionListener
 	{
 		super.paintComponent(g);
 
-		Map map = this.labyrinthView.getStartLabyrinth(); // Map is the start data -> mouseList and doorList contains newer
+		Map map = this.labyrinthView.getStartLabyrinth(); // Map is the start
+															// data -> mouseList
+															// and doorList
+															// contains newer
 
-		// System.out.println("Repainting... " + map.getWidth() + "x" + map.getHeight() + " \nDoors: " + doorList.size());
+		// System.out.println("Repainting... " + map.getWidth() + "x" +
+		// map.getHeight() + " \nDoors: " + doorList.size());
 
-		for(int y = 0; y < map.getHeight(); y++)
+		for (int y = 0; y < map.getHeight(); y++)
 		{
-			for(int x = 0; x < map.getWidth(); x++)
+			for (int x = 0; x < map.getWidth(); x++)
 			{
-				if(map.getField(x, y).isWall())
+				if (map.getField(x, y).isWall())
 				{
 					g.setColor(Color.black);
 					g.fillRect(x * 20, y * 20, 20, 20);
-				}
-				else if(map.getField(x, y).isPath())
+				} else if (map.getField(x, y).isPath())
 				{
 					g.setColor(Color.white);
 					g.fillRect(x * 20, y * 20, 20, 20);
-				}
-				else if(map.getField(x, y).isGoal())
+				} else if (map.getField(x, y).isGoal())
 				{
 					g.setColor(Color.yellow);
 					g.fillRect(x * 20, y * 20, 20, 20);
-				}
-				else if(map.getField(x, y).getClass() == Door.class)
+				} else if (map.getField(x, y).getClass() == Door.class)
 				{
-					int doorID = ((Door)map.getField(x, y)).getId(); // Get it from the right list
+					int doorID = ((Door) map.getField(x, y)).getId(); // Get it
+																		// from
+																		// the
+																		// right
+																		// list
 					Door d = null;
 
-					for(Door door : this.doorList)
+					for (Door door : this.doorList)
 					{
-						if(door.getId() == doorID)
+						if (door.getId() == doorID)
 						{
 							d = door;
 						}
 					}
 
-					if(d == null)
+					if (d == null)
 					{
-						System.out.println("paintComponent(): Error, door with id<" + doorID + "> not found!");
+						System.out
+								.println("paintComponent(): Error, door with id<"
+										+ doorID + "> not found!");
 						return;
 					}
 
-					if(!doorElementsList.containsKey(d.getId()))
+					if (!doorElementsList.containsKey(d.getId()))
 					{
 						final JButton doorButton = new JButton(closedDoorImg);
 						doorButton.setName("" + (d).getId());
@@ -139,26 +150,26 @@ public class LabyrinthComponent extends JPanel implements ActionListener
 							@Override
 							public void actionPerformed(ActionEvent e)
 							{
-								if(doorButton.getIcon() == closedDoorImg)
+								if (doorButton.getIcon() == closedDoorImg)
 								{
 									// doorButton.setIcon(openedDoorImg);
-									labyrinthView.setClickedButtonID(Integer.parseInt(doorButton.getName()));
-								}
-								else
+									labyrinthView.setClickedButtonID(Integer
+											.parseInt(doorButton.getName()));
+								} else
 								{
 									// doorButton.setIcon(closedDoorImg);
-									labyrinthView.setClickedButtonID(Integer.parseInt(doorButton.getName()));
+									labyrinthView.setClickedButtonID(Integer
+											.parseInt(doorButton.getName()));
 								}
 							}
 						});
 
 					}
 
-					if(d.getDoorStatus() == Door.DOOR_OPEN)
+					if (d.getDoorStatus() == Door.DOOR_OPEN)
 					{
 						doorElementsList.get(d.getId()).setIcon(openedDoorImg);
-					}
-					else
+					} else
 					{
 						doorElementsList.get(d.getId()).setIcon(closedDoorImg);
 					}
@@ -168,9 +179,10 @@ public class LabyrinthComponent extends JPanel implements ActionListener
 		}
 
 		// From the game data, not the initial map
-		for(Mouse m : mouseList)
+		for (Mouse m : mouseList)
 		{
-			g.drawImage(this.createMouseImage(m.getColor()), m.getX() * 20, m.getY() * 20, 20, 20, null);
+			g.drawImage(this.createMouseImage(m), m.getX() * 20, m.getY() * 20,
+					20, 20, null);
 		}
 
 		this.setLayout(null);

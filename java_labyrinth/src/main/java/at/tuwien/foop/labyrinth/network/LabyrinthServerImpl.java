@@ -63,20 +63,33 @@ public class LabyrinthServerImpl implements LabyrinthServer
 			}
 		}
 
+		private final int numberSniffingRounds = 30;
+		private final int numberSniffingImmunity = 15; // Sniffing stopped ->
+														// dont sniff for a time
+
 		private MouseState nextMove(Mouse mouse) throws RemoteException
 		{
+			MouseDirection removeDirectionBecauseOfSniffing = null;
+
+			Mouse sniffPartner = getLabyrinth().mouseGetNeighbour(mouse);
+
 			// Sniffing happend a short time before -> first time random
 			// direction, den forward
-			// TODO: implement this!!
-			if (mouse.getTimesToSniff() <= -1)
+			if (mouse.getTimesToSniff() < -1)
 			{
 				mouse.setTimesToSniff(mouse.getTimesToSniff() + 1);
-			} else if (getLabyrinth().mouseFieldContainsOtherMouse(mouse))
+			} else if (sniffPartner != null)
 			{
 				// Activate sniffing
 				if (mouse.getTimesToSniff() < 0)
 				{
-					mouse.setTimesToSniff(30);
+					mouse.setSniffPartner(sniffPartner);
+					sniffPartner.setSniffPartner(mouse);
+
+					mouse.setTimesToSniff(numberSniffingRounds);
+
+					return new MouseState(mouse.getX(), mouse.getY(), mouse
+							.getState().getDirection()); // Keep position
 				}
 
 				// Keep state
@@ -89,11 +102,24 @@ public class LabyrinthServerImpl implements LabyrinthServer
 				}
 
 				// Stop sniffing
-				if (mouse.getTimesToSniff() <= 0)
+				if (mouse.getTimesToSniff() == 0)
 				{
-					mouse.setTimesToSniff(-15);
-				}
+					if (sniffPartner.getTimesToSniff() < 0) // Sniffpartner
+															// has chosen a
+															// direction yet
+					{
+						removeDirectionBecauseOfSniffing = sniffPartner
+								.getState().getDirection();
+					} else
+					// Choose own direction
+					{
+						mouse.setOldState(null);
+					}
 
+					mouse.setTimesToSniff((-1) * numberSniffingImmunity);
+					mouse.setSniffPartner(null);
+
+				}
 			}
 
 			List<MouseDirection> directions = new ArrayList<MouseDirection>(
@@ -151,6 +177,15 @@ public class LabyrinthServerImpl implements LabyrinthServer
 						}
 					}
 				}
+
+				if (removeDirectionBecauseOfSniffing != null) // We don't want
+																// to use the
+																// same
+																// direction the
+																// sniffed mouse
+																// does
+					possibleMoves.remove(removeDirectionBecauseOfSniffing);
+
 				System.out.println(Arrays.toString(possibleMoves.values()
 						.toArray()));
 				random = new Random().nextInt(possibleMoves.size());
@@ -267,6 +302,7 @@ public class LabyrinthServerImpl implements LabyrinthServer
 		this.running = true;
 		timer = new Timer(100, new GameRoundTimer());
 		timer.start();
+		labyrinth.reset();
 
 		ArrayList<Mouse> mouseList = new ArrayList<Mouse>();
 

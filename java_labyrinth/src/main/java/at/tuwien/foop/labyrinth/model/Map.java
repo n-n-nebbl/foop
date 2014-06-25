@@ -80,20 +80,31 @@ public class Map implements Serializable
 		return this.height;
 	}
 
-	public boolean mouseFieldContainsOtherMouse(Mouse currentMouse)
+	public Mouse mouseGetNeighbour(Mouse currentMouse)
 	{
+		if (currentMouse.getSniffPartner() != null)
+			return currentMouse.getSniffPartner();
+
 		for (Mouse m : mouseList)
 		{
+			int diffX = Math.abs(m.getState().getX()
+					- currentMouse.getState().getX());
+			int diffY = Math.abs(m.getState().getY()
+					- currentMouse.getState().getY());
+
 			if (m.getId() != currentMouse.getId()
-					&& m.getState().getX() == currentMouse.getState().getX()
-					&& m.getState().getY() == currentMouse.getState().getY())
+					&& m.getSniffPartner() == null) // Not the current mouse and
+													// mouse has no sniff
+													// partner
 			{
-				return true;
+				if (diffX != 1 && diffY != 1) // Shouldnt be
+					if (diffX <= 1 && diffY <= 1) // They are next to each other
+						return m;
 			}
 
 		}
 
-		return false;
+		return null;
 	}
 
 	public Mouse getMouseByID(int id)
@@ -213,5 +224,10 @@ public class Map implements Serializable
 			System.exit(0);
 			return;
 		}
+	}
+
+	public void reset()
+	{
+		this.mouseList.clear();
 	}
 }

@@ -68,7 +68,7 @@ public class Mouse extends Entity
 		lastColor = (lastColor + 1) % (MouseColor.maxColor); // TODO: fix order
 		this.mouseColor = MouseColor.values()[lastColor];
 		this.id = SequenceGenerator.getNextId("Mouse");
-		this.state = new MouseState(x, y, MouseDirection.RIGHT);
+		this.state = new MouseState(x, y, MouseDirection.RIGHT, false);
 	}
 
 	public MouseColor getColor()

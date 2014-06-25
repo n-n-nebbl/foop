@@ -53,8 +53,8 @@ public class LabyrinthComponent extends JPanel implements ActionListener
 
 	public Image createMouseImage(Mouse mouse)
 	{
-		if (mouse.getSniffPartner() != null)
-			return new ImageIcon("./images/mouth.png").getImage();
+		if (mouse.getState().getSniffing())
+			return new ImageIcon("./images/nose.png").getImage();
 
 		MouseColor m = mouse.getMouseColor();
 		ImageIcon i;

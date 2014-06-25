@@ -89,7 +89,7 @@ public class LabyrinthServerImpl implements LabyrinthServer
 					mouse.setTimesToSniff(numberSniffingRounds);
 
 					return new MouseState(mouse.getX(), mouse.getY(), mouse
-							.getState().getDirection()); // Keep position
+							.getState().getDirection(), true); // Keep position
 				}
 
 				// Keep state
@@ -98,7 +98,7 @@ public class LabyrinthServerImpl implements LabyrinthServer
 					mouse.setTimesToSniff(mouse.getTimesToSniff() - 1);
 
 					return new MouseState(mouse.getX(), mouse.getY(), mouse
-							.getState().getDirection()); // Keep position
+							.getState().getDirection(), true); // Keep position
 				}
 
 				// Stop sniffing
@@ -134,7 +134,7 @@ public class LabyrinthServerImpl implements LabyrinthServer
 				for (MouseDirection direction : directions)
 				{
 					MouseState move = new MouseState(mouse.getX(),
-							mouse.getY(), direction);
+							mouse.getY(), direction, false);
 					move.forward();
 
 					if (getLabyrinth().getField(move.getX(), move.getY())

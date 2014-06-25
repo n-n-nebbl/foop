@@ -10,13 +10,15 @@ public class MouseState implements Serializable
 
 	private int x;
 	private int y;
+	private boolean sniffing = false;
 	private MouseDirection direction;
 
-	public MouseState(int x, int y, MouseDirection direction)
+	public MouseState(int x, int y, MouseDirection direction, boolean sniffing)
 	{
 		this.x = x;
 		this.y = y;
 		this.direction = direction;
+		this.sniffing = sniffing;
 	}
 
 	public MouseState(Mouse mouse)
@@ -28,21 +30,26 @@ public class MouseState implements Serializable
 
 	public void forward()
 	{
-		switch(direction)
+		switch (direction)
 		{
-			case UP:
-				y--;
-				break;
-			case RIGHT:
-				x++;
-				break;
-			case LEFT:
-				x--;
-				break;
-			case DOWN:
-				y++;
-				break;
+		case UP:
+			y--;
+			break;
+		case RIGHT:
+			x++;
+			break;
+		case LEFT:
+			x--;
+			break;
+		case DOWN:
+			y++;
+			break;
 		}
+	}
+
+	public boolean getSniffing()
+	{
+		return this.sniffing;
 	}
 
 	public MouseDirection getDirection()
